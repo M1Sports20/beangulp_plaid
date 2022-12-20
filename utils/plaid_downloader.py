@@ -13,7 +13,8 @@ from plaid.model.transactions_get_request_options import TransactionsGetRequestO
 
 def get_transactions(client, access_token, account_id, start_date, end_date):
     options = TransactionsGetRequestOptions()
-    options.account_ids = [account_id]
+    if account_id is not None:
+        options.account_ids = [account_id]
     request = TransactionsGetRequest(
         access_token=access_token,
         start_date=start_date,
@@ -27,7 +28,6 @@ def get_transactions(client, access_token, account_id, start_date, end_date):
     # while increasing the offset to retrieve all transactions
     while len(rc['transactions']) < response['total_transactions']:
         options.offset = len(rc['transactions'])
-        print("Loop")
 
         request = TransactionsGetRequest(
             access_token=access_token,
@@ -95,9 +95,13 @@ def main():
     api_client = plaid.ApiClient(plaid_config)
     client = plaid_api.PlaidApi(api_client)
 
+
     for acct in args.accounts:
+        account_id = None
+        if 'account_id' in args.config['accounts'][acct]:
+            account_id = args.config['accounts'][acct]['account_id']
         transactions = get_transactions(client, args.config['accounts'][acct]['access_token'],
-                                        args.config['accounts'][acct]['account_id'],
+                                        account_id,
                                         args.start_date,
                                         args.end_date)
         with open(path.join(args.directory, f"{acct}.plaid_download"), "w") as out_fd:
