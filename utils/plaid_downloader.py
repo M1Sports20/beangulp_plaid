@@ -73,7 +73,7 @@ def parse_args():
     # If accounts are not specified, add all of them
     if args.accounts:
         for acct in args.accounts:
-            if acct not in args.config.accounts.keys():
+            if acct not in args.config['accounts'].keys():
                 parser.error(f"Unknown Account: { acct }")
     else:
         # All accounts
