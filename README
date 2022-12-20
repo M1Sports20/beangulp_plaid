@@ -1,0 +1,5 @@
+This directory contains a beangulp importers for the plaid finanical services
+site found at https://www.plaid.com
+
+The importer expects the file format which is downloaded with the included
+utility found at 'utils/plaid_downloader.py'

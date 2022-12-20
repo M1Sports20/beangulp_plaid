@@ -1,0 +1,15 @@
+{
+    "plaid_config": {
+        "host": "https://sandbox.plaid.com",
+        "api_key": {
+            "clientId": "<CLIENT_ID_GOES_HERE>",
+            "secret": "<SECRET_GOES_HERE>"
+        }
+    },
+    "accounts": {
+        "PlaidBank": {
+            "access_token": "<ACCESS_TOKEN_GOES_HERE",
+            "account_id": "<ACCOUNT_ID_GOES_HERE>"
+        }
+    }
+}
