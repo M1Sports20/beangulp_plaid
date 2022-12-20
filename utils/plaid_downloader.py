@@ -104,7 +104,7 @@ def main():
                                         account_id,
                                         args.start_date,
                                         args.end_date)
-        with open(path.join(args.directory, f"{acct}.plaid_download"), "w") as out_fd:
+        with open(path.join(args.directory, f"{date.today()}_{acct}_plaid_download.json"), "w") as out_fd:
             json.dump(transactions.to_dict(), out_fd, cls=DateEncoder)
 
 
