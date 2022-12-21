@@ -41,7 +41,7 @@ class Importer(beangulp.Importer):
             j = json.load(fp)
 
             # Get Balance
-            balance = j['accounts'][0]['balances']['current']
+            balance = str(j['accounts'][0]['balances']['current'])
             currency = j['accounts'][0]['balances']['iso_currency_code']
 
             # Transactions
