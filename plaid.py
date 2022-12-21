@@ -33,7 +33,7 @@ class Importer(beangulp.Importer):
     # def date(self, filepath):
 
     def filename(self, filepath):
-        return f"{self.account_name.split(':')[-1]}"
+        return f"{self.account_name.split(':')[-1]}.json"
 
     def extract(self, filepath, existing):
         entries = []
