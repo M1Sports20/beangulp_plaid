@@ -2,6 +2,7 @@
 
 from datetime import date, timedelta, datetime
 from os import getcwd, path
+import sys
 import argparse
 import json
 
@@ -57,6 +58,8 @@ def parse_args():
                         help='Config file location, default (settings.json)')
     parser.add_argument('-d', '--directory',
                         help="Directory to store downloaded plaid files")
+    parser.add_argument('-l', '--list', action='store_true',
+                        help="List accounts")
     parser.add_argument('-s', '--start-date', dest='start_date', default=str(date.today() -
                         timedelta(1)), help='First day of history to attempt to download, default to yesterday')
     parser.add_argument('-e', '--end-date', dest='end_date', default=str(date.today()),
@@ -82,6 +85,11 @@ def parse_args():
     if args.directory is None:
         args.directory = getcwd()
 
+    if args.list is True:
+        for acct in args.accounts:
+            print(f"{acct}")
+        sys.exit(0)
+
     return args
 
 
@@ -94,7 +102,6 @@ def main():
     )
     api_client = plaid.ApiClient(plaid_config)
     client = plaid_api.PlaidApi(api_client)
-
 
     for acct in args.accounts:
         account_id = None
