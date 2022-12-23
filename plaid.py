@@ -29,8 +29,15 @@ class Importer(beangulp.Importer):
     def account(self, filepath):
         return self.account_name
 
-    # The date of the statement(pdf, etc).  Defaults to the date of the file
-    # def date(self, filepath):
+    def date(self, filepath):
+        last_date = date.min
+        with open(filepath) as fp:
+            j = json.load(fp)
+            for t in j['transactions']:
+                t_date = parse(t['date']).date()
+                if t_date > last_date:
+                    last_date = t_date
+        return last_date
 
     def filename(self, filepath):
         return f"{self.account_name.split(':')[-1]}.json"
