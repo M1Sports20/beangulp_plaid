@@ -20,10 +20,14 @@ class Importer(beangulp.Importer):
 
     def identify(self, filepath):
         with open(filepath) as fp:
-            j = json.load(fp)
-            for t in j['transactions']:
-                if t['account_id'] == self.account_id:
-                    return True
+            try:
+                j = json.load(fp)
+            except:
+                return False
+            if "transactions" in j:
+                for t in j['transactions']:
+                    if t['account_id'] == self.account_id:
+                        return True
         return False
 
     def account(self, filepath):
