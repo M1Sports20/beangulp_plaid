@@ -43,10 +43,13 @@ class Importer(beangulp.Importer):
             # Get Balance
             balance = str(j['accounts'][0]['balances']['current'])
             currency = j['accounts'][0]['balances']['iso_currency_code']
+            last_date = date.min
 
             # Transactions
             for index, t in enumerate(j['transactions']):
                 t_date = parse(t['date']).date()
+                if t_date > last_date:
+                    last_date = t_date
                 merchant = t['merchant_name']
                 description = t['name']
                 amt = str(t['amount'])
@@ -70,7 +73,7 @@ class Importer(beangulp.Importer):
             if len(entries) != 0:
                 meta = data.new_metadata(filepath, 0)
                 entries.append(
-                    data.Balance(meta, date.today() + timedelta(days=1),
+                    data.Balance(meta, last_date + timedelta(days=1),
                                  self.account_name, amount.Amount(
                                      D(balance), currency),
                                  None, None))
