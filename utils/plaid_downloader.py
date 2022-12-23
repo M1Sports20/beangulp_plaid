@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 
 from datetime import date, timedelta, datetime
 from os import getcwd, path
