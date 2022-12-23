@@ -53,7 +53,8 @@ class Importer(beangulp.Importer):
                 trans_id = t['transaction_id']
                 meta = data.new_metadata(filepath, index)
                 units = amount.Amount(D(amt), currency)
-                pst_account = ':'.join(t['category']).replace(' ', '-')
+                pst_account = ':'.join(t['category']).replace(
+                    "'", "").replace(',', '').replace(' ', '-')
 
                 # GET Transaction to post
                 leg1 = data.Posting(self.account_name, -units, None, None,
