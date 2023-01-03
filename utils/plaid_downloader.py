@@ -13,31 +13,37 @@ from plaid.model.transactions_get_request_options import TransactionsGetRequestO
 
 
 def get_transactions(client, access_token, account_id, start_date, end_date):
-    options = TransactionsGetRequestOptions()
-    if account_id is not None:
-        options.account_ids = [account_id]
-    request = TransactionsGetRequest(
-        access_token=access_token,
-        start_date=start_date,
-        end_date=end_date,
-        options=options,
-    )
-    response = client.transactions_get(request)
-    rc = response
-
-    # the transactions in the response are paginated, so make multiple calls
-    # while increasing the offset to retrieve all transactions
-    while len(rc['transactions']) < response['total_transactions']:
-        options.offset = len(rc['transactions'])
-
+    rc = None
+    try:
+        options = TransactionsGetRequestOptions()
+        if account_id is not None:
+            options.account_ids = [account_id]
         request = TransactionsGetRequest(
             access_token=access_token,
             start_date=start_date,
             end_date=end_date,
-            options=options
+            options=options,
         )
         response = client.transactions_get(request)
-        rc['transactions'].extend(response['transactions'])
+        rc = response
+
+        # The transactions in the response are paginated, so make multiple
+        # calls while increasing the offset to retrieve all transactions
+        while len(rc['transactions']) < response['total_transactions']:
+            options.offset = len(rc['transactions'])
+
+            request = TransactionsGetRequest(
+                access_token=access_token,
+                start_date=start_date,
+                end_date=end_date,
+                options=options
+            )
+            response = client.transactions_get(request)
+            rc['transactions'].extend(response['transactions'])
+    except plaid.ApiException as e:
+        response = json.loads(str(e.body))
+        print(f"Download failed: { response['display_message'] }({ response['error_code'] })")
+        rc = None
 
     return rc
 
@@ -104,6 +110,7 @@ def main():
     client = plaid_api.PlaidApi(api_client)
 
     for acct in args.accounts:
+        print(f"Downloading { acct }...")
         account_id = None
         if 'account_id' in args.config['accounts'][acct]:
             account_id = args.config['accounts'][acct]['account_id']
@@ -111,8 +118,9 @@ def main():
                                         account_id,
                                         args.start_date,
                                         args.end_date)
-        with open(path.join(args.directory, f"{date.today()}_{acct}_plaid_download.json"), "w") as out_fd:
-            json.dump(transactions.to_dict(), out_fd, cls=DateEncoder)
+        if transactions is not None:
+            with open(path.join(args.directory, f"{date.today()}_{acct}_plaid_download.json"), "w") as out_fd:
+                json.dump(transactions.to_dict(), out_fd, cls=DateEncoder)
 
 
 if __name__ == '__main__':
