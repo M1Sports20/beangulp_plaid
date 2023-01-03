@@ -60,6 +60,10 @@ class Importer(beangulp.Importer):
 
             # Transactions
             for index, t in enumerate(j['transactions']):
+                # Ignore pending transactions
+                if t['pending'] is True:
+                    continue
+
                 t_date = parse(t['date']).date()
                 if t_date > last_date:
                     last_date = t_date
