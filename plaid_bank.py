@@ -24,9 +24,11 @@ class Importer(beangulp.Importer):
                 j = json.load(fp)
             except:
                 return False
-            if "transactions" in j:
-                for t in j['transactions']:
-                    if t['account_id'] == self.account_id:
+
+            support_transactions = True if "transactions" in j['item']['products'] else False
+            if "accounts" in j:
+                for t in j['accounts']:
+                    if t['account_id'] == self.account_id and support_transactions:
                         return True
         return False
 
