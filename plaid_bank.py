@@ -54,6 +54,7 @@ class Importer(beangulp.Importer):
 
             # Get Balance
             balance = str(j['transactions']['accounts'][0]['balances']['current'])
+            account_type = j['transactions']['accounts'][0]['type']
             currency = j['transactions']['accounts'][0]['balances']['iso_currency_code']
             last_date = date.min
 
@@ -88,11 +89,11 @@ class Importer(beangulp.Importer):
             # Insert a final balance check
             if len(entries) != 0:
                 meta = data.new_metadata(filepath, 0)
-                entries.append(
-                    data.Balance(meta, last_date + timedelta(days=1),
-                                 self.account_name, amount.Amount(
-                                     D(balance), currency),
-                                 None, None))
+                amt = amount.Amount(D(balance), currency)
+                if account_type == "credit" or account_type == "loan":
+                    amt = -amt
+                entries.append(data.Balance(meta, last_date + timedelta(days=1),
+                                 self.account_name, amt, None, None))
 
         return entries
 
