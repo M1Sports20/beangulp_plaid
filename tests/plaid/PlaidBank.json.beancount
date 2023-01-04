@@ -5,36 +5,36 @@
 2022-09-02 * "CREDIT CARD 3333 PAYMENT *//"
   Assets:Current:PlaidSampleBank  -25.0 USD
     transaction_id: "mm4E6vDZvEfjJdZAnG4efkn3NeDL88FA1lDDR"
-  ! Expenses:Payment:Credit-Card   25.0 USD
+  Expenses:Payment:Credit-Card     25.0 USD
 
 2022-09-27 * "INTRST PYMNT"
   Assets:Current:PlaidSampleBank   4.22 USD
     transaction_id: "bL57RZXQZ7C8NnZj9RrLCXAPKpZRWWF3WJXX9"
-  ! Expenses:Transfer:Credit      -4.22 USD
+  Expenses:Transfer:Credit        -4.22 USD
 
 2022-10-02 * "CREDIT CARD 3333 PAYMENT *//"
   Assets:Current:PlaidSampleBank  -25.0 USD
     transaction_id: "nyNW6vD1vWfJagXRjoQMilNZEwj199cGzXjjX"
-  ! Expenses:Payment:Credit-Card   25.0 USD
+  Expenses:Payment:Credit-Card     25.0 USD
 
 2022-10-27 * "INTRST PYMNT"
   Assets:Current:PlaidSampleBank   4.22 USD
     transaction_id: "GW71VJzBJ1iW4ZzbGm8gCojQPda4XXfnbL55d"
-  ! Expenses:Transfer:Credit      -4.22 USD
+  Expenses:Transfer:Credit        -4.22 USD
 
 2022-11-01 * "CREDIT CARD 3333 PAYMENT *//"
   Assets:Current:PlaidSampleBank  -25.0 USD
     transaction_id: "ALdjoJVbJjCPk65XvVmGiezL7mwDggTogkQQD"
-  ! Expenses:Payment:Credit-Card   25.0 USD
+  Expenses:Payment:Credit-Card     25.0 USD
 
 2022-11-26 * "INTRST PYMNT"
   Assets:Current:PlaidSampleBank   4.22 USD
     transaction_id: "WabrB3Mg3rIMVR8qngbPi7ay3ZA8XXt4p5kkM"
-  ! Expenses:Transfer:Credit      -4.22 USD
+  Expenses:Transfer:Credit        -4.22 USD
 
 2022-12-01 * "CREDIT CARD 3333 PAYMENT *//"
   Assets:Current:PlaidSampleBank  -25.0 USD
     transaction_id: "E8PZLJKEJZu41y7QElLXF1dLrNBojjfEoMqqR"
-  ! Expenses:Payment:Credit-Card   25.0 USD
+  Expenses:Payment:Credit-Card     25.0 USD
 
 2022-12-02 balance Assets:Current:PlaidSampleBank                  210.0 USD

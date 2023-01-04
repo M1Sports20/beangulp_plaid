@@ -80,7 +80,7 @@ class Importer(beangulp.Importer):
                 leg1 = data.Posting(self.account_name, -units, None, None,
                                     None, {'transaction_id': trans_id})
                 leg2 = data.Posting("Expenses:" + pst_account, units, None, None,
-                                    flags.FLAG_WARNING, None)
+                                    None, None)
                 txn = data.Transaction(meta, t_date, flags.FLAG_OKAY,
                                        merchant, description, data.EMPTY_SET,
                                        data.EMPTY_SET, [leg1, leg2])
