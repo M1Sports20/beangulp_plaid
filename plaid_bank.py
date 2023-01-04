@@ -25,10 +25,9 @@ class Importer(beangulp.Importer):
             except:
                 return False
 
-            support_transactions = True if "transactions" in j['item']['products'] else False
-            if "accounts" in j:
-                for t in j['accounts']:
-                    if t['account_id'] == self.account_id and support_transactions:
+            if 'transactions' in j['response_types']:
+                if "accounts" in j['transactions']:
+                    if j['transactions']['accounts'][0]['account_id'] == self.account_id:
                         return True
         return False
 
@@ -39,7 +38,7 @@ class Importer(beangulp.Importer):
         last_date = date.min
         with open(filepath) as fp:
             j = json.load(fp)
-            for t in j['transactions']:
+            for t in j['transactions']['transactions']:
                 t_date = parse(t['date']).date()
                 if t_date > last_date:
                     last_date = t_date
@@ -54,12 +53,12 @@ class Importer(beangulp.Importer):
             j = json.load(fp)
 
             # Get Balance
-            balance = str(j['accounts'][0]['balances']['current'])
-            currency = j['accounts'][0]['balances']['iso_currency_code']
+            balance = str(j['transactions']['accounts'][0]['balances']['current'])
+            currency = j['transactions']['accounts'][0]['balances']['iso_currency_code']
             last_date = date.min
 
             # Transactions
-            for index, t in enumerate(j['transactions']):
+            for index, t in enumerate(j['transactions']['transactions']):
                 # Ignore pending transactions
                 if t['pending'] is True:
                     continue
