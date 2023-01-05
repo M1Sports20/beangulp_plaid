@@ -45,6 +45,7 @@ def get_investment_transactions(client, access_token, account_id, start_date, en
         options = InvestmentsTransactionsGetRequestOptions()
         if account_id is not None:
             options.account_ids = [account_id]
+            options.count = 500
         request = InvestmentsTransactionsGetRequest(
             access_token=access_token,
             start_date=start_date,
@@ -81,6 +82,7 @@ def get_transactions(client, access_token, account_id, start_date, end_date):
         options = TransactionsGetRequestOptions()
         if account_id is not None:
             options.account_ids = [account_id]
+            options.count = 500
         request = TransactionsGetRequest(
             access_token=access_token,
             start_date=start_date,
