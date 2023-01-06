@@ -4,14 +4,13 @@ __license__ = "GNU GPLv2"
 import json
 import beangulp
 from dateutil.parser import parse
-from datetime import date, timedelta
 
 from beancount.core import data
 from beancount.core import amount
 from beancount.core import position
 from beancount.core import flags
 from beangulp.testing import main
-from beancount.core.number import D
+from beancount.core.number import D, ZERO
 
 
 class Importer(beangulp.Importer):
@@ -20,9 +19,14 @@ class Importer(beangulp.Importer):
         self.account_id = account_id
         self.cash_acount_name = "Cash"
         self.plaid_func_table = {
-                    ("cash", "deposit"): self.cash_deposit,
-                    ("fee", "miscellaneous fee"): self.misc_fee
-                }
+                    ("cash", "deposit"): self.__cash_deposit_withdrawal,
+                    ("cash", "withdrawal"): self.__cash_deposit_withdrawal,
+                    ("fee", "miscellaneous fee"): self.__fee_misc_fee,
+                    ("fee", "interest"): self.__fee_misc_fee,
+                    ("fee", "dividend"): self.__fee_dividend,
+                    ("buy", "buy"): self.__buy_buy,
+                    ("sell", "sell"): self.__buy_buy
+        }
 
     def identify(self, filepath):
         with open(filepath) as fp:
@@ -43,92 +47,145 @@ class Importer(beangulp.Importer):
     def filename(self, filepath):
         return f"{self.account_name.split(':')[-1]}.json"
 
-    def extract_prices(self, filepath, existing):
+    def __build_security_table(self, securities):
+        sec_table = {}
+        for s in securities:
+            sec_table[s['security_id']] = s
+        return sec_table
+
+    def __build_commodity_table(self, existing):
+        self.commodities = {}
+        for c in existing:
+            if isinstance(c, data.Commodity):
+                (meta, date, currency) = c
+                self.commodities[meta['name']] = currency
+
+    def __extract_prices(self, filepath, existing, holdings):
         entries = []
-        with open(filepath) as fp:
-            j = json.load(fp)
 
-            if 'investment_holdings' in j['response_types']:
-                securities = j['investment_holdings']['securities']
+        for index, holding in enumerate(holdings):
+            t_price = holding['institution_price']
+            t_date = parse(holding['institution_price_as_of']).date()
+            t_currency = holding['iso_currency_code']
+            security = self.holding_securities[holding['security_id']]
+            t_ticker = security['ticker_symbol']
+            s_name = security['name']
+            meta = data.new_metadata(filepath, index)
+            # Unknown ticker. Use name to lookup commodity from ledger
 
-                for index, security in enumerate(securities):
-                    t_date = parse(security['close_price_as_of']).date()
-                    t_ticker = security['ticker_symbol']
-                    t_price = security['close_price']
-                    t_currency = security['iso_currency_code']
-                    meta = data.new_metadata(filepath, index)
-                    price = data.Price(meta, t_date, t_ticker, amount.Amount(D(str(t_price)), t_currency))
-                    entries.append(price)
+            if t_price != ZERO:
+                if t_ticker is None and s_name in self.commodities:
+                    t_ticker = self.commodities[s_name]
+                assert t_ticker is not None, f"Ticker unknown and couldn't lookup by name in ledger by name: ({ s_name })"
+                price = data.Price(meta, t_date, t_ticker, amount.Amount(D(str(t_price)), t_currency))
+                entries.append(price)
         return entries
 
-    def cash_deposit(self, meta, t, s):
+    def __cash_deposit_withdrawal(self, meta, t):
+        t_sec_id = t['security_id']
         t_currency = t['iso_currency_code']
         t_amount = amount.Amount(D(str(t['amount'])), t_currency)
         t_date = parse(t['date']).date()
         t_name = t['name']
         t_transaction_id = t['investment_transaction_id']
+        s = self.transaction_securities[t_sec_id]
         s_name = s['name']
         postings = []
 
-        postings.append(data.Posting(":".join((self.account_name, self.cash_acount_name)),
-                            -t_amount, None, None, None, {'transaction_id': t_transaction_id}))
-        postings.append(data.Posting("Unknown Account", t_amount, None, None, None, None))
+        postings.append(data.Posting(":".join((self.account_name, self.cash_acount_name)), -t_amount, None, None, None, {'transaction_id': t_transaction_id}))
         txn = data.Transaction(meta, t_date, flags.FLAG_OKAY, s_name, t_name, data.EMPTY_SET, data.EMPTY_SET, postings)
         return txn
 
-    def misc_fee(self, meta, t, s):
+    def __fee_misc_fee(self, meta, t):
+        t_sec_id = t['security_id']
         t_currency = t['iso_currency_code']
         t_amount = amount.Amount(D(str(t['amount'])), t_currency)
         t_date = parse(t['date']).date()
         t_name = t['name']
         t_transaction_id = t['investment_transaction_id']
+        s = self.transaction_securities[t_sec_id]
         s_ticker = s['ticker_symbol']
         s_name = s['name']
         s_cash_equivalent = s['is_cash_equivalent']
-        s_currency = t['iso_currency_code']
-        s_price = amount.Amount(D(str(s['close_price'])), s_currency)
+        s_amount = amount.Amount(D(str(t['amount'])), s_ticker)
+        s_currency = s['iso_currency_code']
+        s_price = amount.Amount(D(str(s['close_price'])), s_currency)  # only works because we only support cash_equivalent
         postings = []
 
         assert s_cash_equivalent is True, "Currently, only sweeps are supported for misc fees"
 
-        meta['transaction_id'] = t_transaction_id
-        postings.append(data.Posting(":".join((self.account_name, self.cash_acount_name)),
-                            -t_amount, None, None, None, None))
-        cost = position.Cost(D(str(s['close_price'])), s_currency, t_date, None)
-        postings.append(data.Posting(":".join((self.account_name, s_ticker)), s_price, cost, s_price, None, None))
+        postings.append(data.Posting(":".join((self.account_name, self.cash_acount_name)), -t_amount, None, None, None, None))
+        postings.append(data.Posting(":".join((self.account_name, s_ticker)), s_amount, None, s_price, None, {'transaction_id': t_transaction_id}))
+        txn = data.Transaction(meta, t_date, flags.FLAG_OKAY, s_name, t_name, data.EMPTY_SET, data.EMPTY_SET, postings)
+        return txn
+
+    def __fee_dividend(self, meta, t):
+        t_sec_id = t['security_id']
+        t_currency = t['iso_currency_code']
+        t_amount = amount.Amount(D(str(t['amount'])), t_currency)
+        t_date = parse(t['date']).date()
+        t_name = t['name']
+        t_transaction_id = t['investment_transaction_id']
+        s = self.transaction_securities[t_sec_id]
+        s_name = s['name']
+        postings = []
+
+        postings.append(data.Posting("Income:Dividend", t_amount, None, None, None, None))
+        postings.append(data.Posting(":".join((self.account_name, self.cash_acount_name)), -t_amount, None, None, None, {'transaction_id': t_transaction_id}))
+        txn = data.Transaction(meta, t_date, flags.FLAG_OKAY, s_name, t_name, data.EMPTY_SET, data.EMPTY_SET, postings)
+        return txn
+
+    def __buy_buy(self, meta, t):
+        t_sec_id = t['security_id']
+        t_currency = t['iso_currency_code']
+        t_amount = D(str(t['amount']))
+        t_date = parse(t['date']).date()
+        t_name = t['name']
+        t_transaction_id = t['investment_transaction_id']
+        s = self.transaction_securities[t_sec_id]
+        s_ticker = s['ticker_symbol']
+        s_name = s['name']
+        t_quantity = amount.Amount(D(str(t['quantity'])), s_ticker)
+        t_price = D(str(t['price']))
+        postings = []
+
+        postings.append(data.Posting(":".join((self.account_name, self.cash_acount_name)), -amount.Amount(t_amount, t_currency), None, None, None, None))
+        cost = position.Cost(t_price, t_currency, t_date, None)
+        postings.append(data.Posting(":".join((self.account_name, s_ticker)), t_quantity, cost, amount.Amount(t_price, t_currency), None, {'transaction_id': t_transaction_id}))
         txn = data.Transaction(meta, t_date, flags.FLAG_OKAY, s_name, t_name, data.EMPTY_SET, data.EMPTY_SET, postings)
         return txn
 
     def extract(self, filepath, existing):
+        self.__build_commodity_table(existing)
         entries = []
         with open(filepath) as fp:
             j = json.load(fp)
 
-            if 'investment_transactions' in j['response_types']:
+            if 'investment_transactions' in j['response_types'] and 'investment_holdings' in j['response_types']:
                 trans = j['investment_transactions']
+                investment_holdings = j['investment_holdings']
                 transactions = trans['investment_transactions']
-                securities =  trans['securities']
-                balance = str(trans['accounts'][0]['balances']['current'])
-                currency = trans['accounts'][0]['balances']['iso_currency_code']
-                last_date = date.min
+                holdings = investment_holdings['holdings']
 
-                # Build Securities lookup_table
-                sec_table = {}
-                for s in securities:
-                    sec_table[s['security_id']] = s
+                self.transaction_securities = self.__build_security_table(trans['securities']) if 'securities' in trans else {}
+                self.holding_securities = self.__build_security_table(investment_holdings['securities']) if 'securities' in investment_holdings else {}
 
                 # Handle Transactions
                 for index, t in enumerate(transactions):
                     t_type = t['type']
                     t_subtype = t['subtype']
-                    t_sec_id = t['security_id']
                     meta = data.new_metadata(filepath, index)
 
                     trans_func = self.plaid_func_table.get((t_type, t_subtype))
                     assert trans_func is not None, f"Unhandled Investment transaction (type: { t_type }, subtype: { t_subtype } )"
-                    entries.append(trans_func(meta, t, sec_table[t_sec_id]))
+                    tmp = trans_func(meta, t)
+                    if tmp is not None:
+                        entries.append(tmp)
+                    #  TODO Add balance checks
 
-            entries.append(extract_prices(self, filepath, existing)
+                prices = self.__extract_prices(filepath, existing, holdings)
+                entries.extend(prices)
+
             return entries
 
 

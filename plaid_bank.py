@@ -83,7 +83,7 @@ class Importer(beangulp.Importer):
                 if account_type == "credit" or account_type == "loan":
                     amt = -amt
                 entries.append(data.Balance(meta, last_date + timedelta(days=1),
-                                 self.account_name, amt, None, None))
+                                            self.account_name, amt, None, None))
 
         return entries
 
