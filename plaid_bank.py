@@ -12,6 +12,7 @@ from beancount.core import flags
 from beangulp.testing import main
 from beancount.core.number import D
 
+DUPLICATE = '__duplicate__'
 
 class Importer(beangulp.Importer):
     def __init__(self, account_name, account_id):
@@ -84,9 +85,29 @@ class Importer(beangulp.Importer):
                     amt = -amt
                 entries.append(data.Balance(meta, last_date + timedelta(days=1),
                                             self.account_name, amt, None, None))
-
         return entries
 
+    def deduplicate(self, entries: data.Entries, existing: data.Entries) -> data.Entries:
+        marked = []
+        plaid_ids = set()
+
+        # Create set of plaid_ids
+        for entry in existing:
+            if isinstance(entry, data.Transaction):
+                for posting in entry.postings:
+                    if 'transaction_id' in posting.meta:
+                        plaid_ids.add(posting.meta['transaction_id'])
+
+        for entry in entries:
+            if isinstance(entry, data.Transaction):
+                for posting in entry.postings:
+                    if posting.meta is not None and 'transaction_id' in posting.meta:
+                        if posting.meta['transaction_id'] in plaid_ids:
+                            meta = entry.meta.copy()
+                            meta[DUPLICATE] = True
+                            entry = entry._replace(meta=meta)
+            marked.append(entry)
+        return marked
 
 if __name__ == '__main__':
     importer = Importer('Assets:Current:PlaidSampleBank',
