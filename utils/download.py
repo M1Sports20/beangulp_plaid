@@ -15,6 +15,7 @@ from plaid.model.investments_transactions_get_request import InvestmentsTransact
 from plaid.model.investments_transactions_get_request_options import InvestmentsTransactionsGetRequestOptions
 from plaid.model.investments_holdings_get_request import InvestmentsHoldingsGetRequest
 from plaid.model.investment_holdings_get_request_options import InvestmentHoldingsGetRequestOptions
+from plaid.model.transactions_refresh_request import TransactionsRefreshRequest
 
 
 # Plaid Account type
@@ -129,8 +130,9 @@ def parse_args():
                         help='Config file location, default (settings.json)')
     parser.add_argument('-d', '--directory',
                         help="Directory to store downloaded plaid files")
-    parser.add_argument('-l', '--list', action='store_true',
-                        help="List accounts")
+    parser.add_argument('-l', '--list', action='store_true', help="List accounts")
+    parser.add_argument("-r", "--refresh", action='store_true',
+                        help="Force plaid to refresh data immediately before downloading")
     parser.add_argument('-s', '--start-date', dest='start_date', default=str(date.today() -
                         timedelta(1)), help='First day of history to attempt to download, default to yesterday')
     parser.add_argument('-e', '--end-date', dest='end_date', default=str(date.today()),
@@ -179,6 +181,15 @@ def main():
         output = {}
         account_type = args.config['accounts'][acct]['account_type']
         access_token = args.config['accounts'][acct]['access_token']
+
+        if args.refresh:
+            try:
+                request = TransactionsRefreshRequest(access_token=access_token)
+                response = client.transactions_refresh(request)
+            except plaid.ApiException as e:
+                response = json.loads(str(e.body))
+                print(f"refresh failed: { response['display_message'] }({ response['error_code'] })")
+
         if 'account_id' in args.config['accounts'][acct]:
             account_id = args.config['accounts'][acct]['account_id']
 
