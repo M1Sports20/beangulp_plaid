@@ -36,7 +36,7 @@ class Importer(beangulp.Importer):
             except:
                 return False
 
-            if 'investment_transactions' in j['response_types']:
+            if 'repsonse_types' in j and 'investment_transactions' in j['response_types']:
                 if "accounts" in j['investment_transactions']:
                     if j['investment_transactions']['accounts'][0]['account_id'] == self.account_id:
                         return True

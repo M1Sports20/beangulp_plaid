@@ -197,8 +197,9 @@ def main():
             print(f"Downloading { acct } (transactions)...")
             transactions = get_transactions(client, access_token, account_id,
                                             args.start_date, args.end_date)
-            output['response_types'] = ["transactions"]
-            output['transactions'] = transactions.to_dict()
+            if bool(transactions):
+                output['response_types'] = ["transactions"]
+                output['transactions'] = transactions.to_dict()
 
         else:
             output['response_types'] = []
