@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 from datetime import date, timedelta, datetime
-from enum import Enum
 from os import getcwd, path
 import sys
 import argparse
@@ -9,6 +8,7 @@ import json
 
 import plaid
 from plaid.api import plaid_api
+from plaid.model.item_get_request import ItemGetRequest
 from plaid.model.transactions_get_request import TransactionsGetRequest
 from plaid.model.transactions_get_request_options import TransactionsGetRequestOptions
 from plaid.model.investments_transactions_get_request import InvestmentsTransactionsGetRequest
@@ -18,10 +18,14 @@ from plaid.model.investment_holdings_get_request_options import InvestmentHoldin
 from plaid.model.transactions_refresh_request import TransactionsRefreshRequest
 
 
-# Plaid Account type
-class PlaidAcctType(str, Enum):
-    BANK = "BANK"
-    INVESTMENT = "INVESTMENT"
+def get_item(client, access_token):
+    try:
+        request = ItemGetRequest(access_token)
+        return client.item_get(request)
+    except plaid.ApiException as e:
+        response = json.loads(str(e.body))
+        print(f"Failed to get item: { response['display_message'] }({ response['error_code'] })")
+    return None
 
 
 def get_investment_holdings(client, access_token, account_id):
@@ -36,12 +40,10 @@ def get_investment_holdings(client, access_token, account_id):
     except plaid.ApiException as e:
         response = json.loads(str(e.body))
         print(f"Download holdings failed: { response['display_message'] }({ response['error_code'] })")
-    return {}
+    return None
 
 
 def get_investment_transactions(client, access_token, account_id, start_date, end_date):
-    resp_dict = {}
-
     try:
         options = InvestmentsTransactionsGetRequestOptions()
         if account_id is not None:
@@ -72,13 +74,11 @@ def get_investment_transactions(client, access_token, account_id, start_date, en
     except plaid.ApiException as e:
         response = json.loads(str(e.body))
         print(f"Download failed: { response['display_message'] }({ response['error_code'] })")
-        resp_dict = {}
-
+        resp_dict = None
     return resp_dict
 
 
 def get_transactions(client, access_token, account_id, start_date, end_date):
-    resp_dict = {}
     try:
         options = TransactionsGetRequestOptions()
         if account_id is not None:
@@ -109,8 +109,7 @@ def get_transactions(client, access_token, account_id, start_date, end_date):
     except plaid.ApiException as e:
         response = json.loads(str(e.body))
         print(f"Download failed: { response['display_message'] }({ response['error_code'] })")
-        resp_dict = {}
-
+        resp_dict = None
     return resp_dict
 
 
@@ -145,6 +144,11 @@ def parse_args():
 
     args.end_date = datetime.strptime(args.end_date, '%Y-%m-%d').date()
     args.start_date = datetime.strptime(args.start_date, '%Y-%m-%d').date()
+    args.directory = getcwd() if args.directory is None else args.directory
+
+    if args.list is True:
+        print("\n".join(args.config['accounts'].keys()))
+        sys.exit(0)
 
     # If accounts are not specified, add all of them
     if args.accounts:
@@ -154,14 +158,6 @@ def parse_args():
     else:
         # All accounts
         args.accounts = args.config['accounts'].keys()
-
-    if args.directory is None:
-        args.directory = getcwd()
-
-    if args.list is True:
-        for acct in args.accounts:
-            print(f"{acct}")
-        sys.exit(0)
 
     return args
 
@@ -177,10 +173,9 @@ def main():
     client = plaid_api.PlaidApi(api_client)
 
     for acct in args.accounts:
+        access_token = args.config['accounts'][acct]['access_token']
         account_id = None
         output = {}
-        account_type = args.config['accounts'][acct]['account_type']
-        access_token = args.config['accounts'][acct]['access_token']
 
         if args.refresh:
             try:
@@ -190,36 +185,38 @@ def main():
                 response = json.loads(str(e.body))
                 print(f"refresh failed: { response['display_message'] }({ response['error_code'] })")
 
-        if 'account_id' in args.config['accounts'][acct]:
-            account_id = args.config['accounts'][acct]['account_id']
+        # Determine last plaid update and supported api calls
+        print(f"Downloading { acct }...")
+        response = get_item(client, access_token)
+        if response is not None:
+            output['resp_item'] = response.to_dict()
+            products = output['resp_item']['item']['products']
 
-        if account_type == PlaidAcctType.BANK:
-            print(f"Downloading { acct } (transactions)...")
-            transactions = get_transactions(client, access_token, account_id,
-                                            args.start_date, args.end_date)
-            if bool(transactions):
-                output['response_types'] = ["transactions"]
-                output['transactions'] = transactions.to_dict()
+            if 'account_id' in args.config['accounts'][acct]:
+                account_id = args.config['accounts'][acct]['account_id']
 
-        else:
-            output['response_types'] = []
-            print(f"Downloading { acct } (investment transactions)...")
-            transactions = get_investment_transactions(client, access_token,
-                                                       account_id,
-                                                       args.start_date,
-                                                       args.end_date)
-            if bool(transactions):
-                output['response_types'].append("investment_transactions")
-                output['investment_transactions'] = transactions.to_dict()
+            # Download Transactions
+            if "transactions" in products:
+                print("..transactions")
+                transactions = get_transactions(client, access_token, account_id, args.start_date, args.end_date)
+                if transactions is not None:
+                    output['resp_transactions'] = transactions.to_dict()
 
-            print(f"Downloading { acct } (investment holdings)...")
-            holdings = get_investment_holdings(client, access_token, account_id)
-            if bool(holdings):
-                output['response_types'].append("investment_holdings")
-                output['investment_holdings'] = holdings.to_dict()
+            # Download Investment Transactions
+            if "investments" in products:
+                print("..investment transactions")
+                investment_transactions = get_investment_transactions(client, access_token, account_id, args.start_date, args.end_date)
+                if investment_transactions is not None:
+                    output['resp_investment_transactions'] = investment_transactions.to_dict()
 
-        with open(path.join(args.directory, f"{date.today()}_{acct}_plaid_download.json"), "w") as out_fd:
-            json.dump(output, out_fd, cls=DateEncoder)
+                print("..investment holdings")
+                holdings = get_investment_holdings(client, access_token, account_id)
+                if holdings is not None:
+                    output['resp_investment_holdings'] = holdings.to_dict()
+
+            # Save to file
+            with open(path.join(args.directory, f"{date.today()}_{acct}_plaid_download.json"), "w") as out_fd:
+                json.dump(output, out_fd, cls=DateEncoder)
 
 
 if __name__ == '__main__':

@@ -1,379 +1,1350 @@
 {
-  "response_types": [
-    "transactions"
-  ],
-  "transactions": {
-    "accounts": [
-      {
-        "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
-        "balances": {
-          "available": 200.0,
-          "current": 210.0,
-          "limit": null,
-          "iso_currency_code": "USD",
-          "unofficial_currency_code": null
+    "resp_item": {
+        "item": {
+            "item_id": "xapz6vqwvzIW8NGlnr5kCeBQ5MG6DEcn9rvlw",
+            "webhook": "",
+            "error": null,
+            "available_products": [
+                "assets",
+                "balance",
+                "credit_details",
+                "identity",
+                "income",
+                "recurring_transactions"
+            ],
+            "billed_products": [
+                "auth",
+                "investments",
+                "liabilities",
+                "transactions"
+            ],
+            "consent_expiration_time": null,
+            "update_type": "background",
+            "institution_id": "ins_56",
+            "optional_products": null,
+            "products": [
+                "auth",
+                "investments",
+                "liabilities",
+                "transactions"
+            ]
         },
-        "mask": "1111",
-        "name": "Plaid Saving",
-        "official_name": "Plaid Silver Standard 0.1% Interest Saving",
-        "type": "depository",
-        "subtype": "savings"
-      }
-    ],
-    "transactions": [
-      {
-        "pending_transaction_id": null,
-        "category_id": "16001000",
-        "category": [
-          "Payment",
-          "Credit Card"
-        ],
-        "location": {
-          "address": null,
-          "city": null,
-          "region": null,
-          "postal_code": null,
-          "country": null,
-          "lat": null,
-          "lon": null,
-          "store_number": null
-        },
-        "payment_meta": {
-          "reference_number": null,
-          "ppd_id": null,
-          "payee": null,
-          "by_order_of": null,
-          "payer": null,
-          "payment_method": null,
-          "payment_processor": null,
-          "reason": null
-        },
-        "account_owner": null,
-        "name": "CREDIT CARD 3333 PAYMENT *//",
-        "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
-        "amount": 25.0,
-        "iso_currency_code": "USD",
-        "unofficial_currency_code": null,
-        "date": "2022-12-01",
-        "pending": false,
-        "transaction_id": "E8PZLJKEJZu41y7QElLXF1dLrNBojjfEoMqqR",
-        "payment_channel": "other",
-        "authorized_date": "2022-11-30",
-        "authorized_datetime": null,
-        "datetime": null,
-        "transaction_code": null,
-        "check_number": null,
-        "merchant_name": null,
-        "personal_finance_category": null,
-        "transaction_type": "special"
-      },
-      {
-        "pending_transaction_id": null,
-        "category_id": "21005000",
-        "category": [
-          "Transfer",
-          "Credit"
-        ],
-        "location": {
-          "address": null,
-          "city": null,
-          "region": null,
-          "postal_code": null,
-          "country": null,
-          "lat": null,
-          "lon": null,
-          "store_number": null
-        },
-        "payment_meta": {
-          "reference_number": null,
-          "ppd_id": null,
-          "payee": null,
-          "by_order_of": null,
-          "payer": null,
-          "payment_method": null,
-          "payment_processor": null,
-          "reason": null
-        },
-        "account_owner": null,
-        "name": "INTRST PYMNT",
-        "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
-        "amount": -4.22,
-        "iso_currency_code": "USD",
-        "unofficial_currency_code": null,
-        "date": "2022-11-26",
-        "pending": false,
-        "transaction_id": "WabrB3Mg3rIMVR8qngbPi7ay3ZA8XXt4p5kkM",
-        "payment_channel": "other",
-        "authorized_date": "2022-11-26",
-        "authorized_datetime": null,
-        "datetime": null,
-        "transaction_code": null,
-        "check_number": null,
-        "merchant_name": null,
-        "personal_finance_category": null,
-        "transaction_type": "special"
-      },
-      {
-        "pending_transaction_id": null,
-        "category_id": "16001000",
-        "category": [
-          "Payment",
-          "Credit Card"
-        ],
-        "location": {
-          "address": null,
-          "city": null,
-          "region": null,
-          "postal_code": null,
-          "country": null,
-          "lat": null,
-          "lon": null,
-          "store_number": null
-        },
-        "payment_meta": {
-          "reference_number": null,
-          "ppd_id": null,
-          "payee": null,
-          "by_order_of": null,
-          "payer": null,
-          "payment_method": null,
-          "payment_processor": null,
-          "reason": null
-        },
-        "account_owner": null,
-        "name": "CREDIT CARD 3333 PAYMENT *//",
-        "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
-        "amount": 25.0,
-        "iso_currency_code": "USD",
-        "unofficial_currency_code": null,
-        "date": "2022-11-01",
-        "pending": false,
-        "transaction_id": "ALdjoJVbJjCPk65XvVmGiezL7mwDggTogkQQD",
-        "payment_channel": "other",
-        "authorized_date": "2022-10-31",
-        "authorized_datetime": null,
-        "datetime": null,
-        "transaction_code": null,
-        "check_number": null,
-        "merchant_name": null,
-        "personal_finance_category": null,
-        "transaction_type": "special"
-      },
-      {
-        "pending_transaction_id": null,
-        "category_id": "21005000",
-        "category": [
-          "Transfer",
-          "Credit"
-        ],
-        "location": {
-          "address": null,
-          "city": null,
-          "region": null,
-          "postal_code": null,
-          "country": null,
-          "lat": null,
-          "lon": null,
-          "store_number": null
-        },
-        "payment_meta": {
-          "reference_number": null,
-          "ppd_id": null,
-          "payee": null,
-          "by_order_of": null,
-          "payer": null,
-          "payment_method": null,
-          "payment_processor": null,
-          "reason": null
-        },
-        "account_owner": null,
-        "name": "INTRST PYMNT",
-        "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
-        "amount": -4.22,
-        "iso_currency_code": "USD",
-        "unofficial_currency_code": null,
-        "date": "2022-10-27",
-        "pending": false,
-        "transaction_id": "GW71VJzBJ1iW4ZzbGm8gCojQPda4XXfnbL55d",
-        "payment_channel": "other",
-        "authorized_date": "2022-10-27",
-        "authorized_datetime": null,
-        "datetime": null,
-        "transaction_code": null,
-        "check_number": null,
-        "merchant_name": null,
-        "personal_finance_category": null,
-        "transaction_type": "special"
-      },
-      {
-        "pending_transaction_id": null,
-        "category_id": "16001000",
-        "category": [
-          "Payment",
-          "Credit Card"
-        ],
-        "location": {
-          "address": null,
-          "city": null,
-          "region": null,
-          "postal_code": null,
-          "country": null,
-          "lat": null,
-          "lon": null,
-          "store_number": null
-        },
-        "payment_meta": {
-          "reference_number": null,
-          "ppd_id": null,
-          "payee": null,
-          "by_order_of": null,
-          "payer": null,
-          "payment_method": null,
-          "payment_processor": null,
-          "reason": null
-        },
-        "account_owner": null,
-        "name": "CREDIT CARD 3333 PAYMENT *//",
-        "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
-        "amount": 25.0,
-        "iso_currency_code": "USD",
-        "unofficial_currency_code": null,
-        "date": "2022-10-02",
-        "pending": false,
-        "transaction_id": "nyNW6vD1vWfJagXRjoQMilNZEwj199cGzXjjX",
-        "payment_channel": "other",
-        "authorized_date": "2022-10-01",
-        "authorized_datetime": null,
-        "datetime": null,
-        "transaction_code": null,
-        "check_number": null,
-        "merchant_name": null,
-        "personal_finance_category": null,
-        "transaction_type": "special"
-      },
-      {
-        "pending_transaction_id": null,
-        "category_id": "21005000",
-        "category": [
-          "Transfer",
-          "Credit"
-        ],
-        "location": {
-          "address": null,
-          "city": null,
-          "region": null,
-          "postal_code": null,
-          "country": null,
-          "lat": null,
-          "lon": null,
-          "store_number": null
-        },
-        "payment_meta": {
-          "reference_number": null,
-          "ppd_id": null,
-          "payee": null,
-          "by_order_of": null,
-          "payer": null,
-          "payment_method": null,
-          "payment_processor": null,
-          "reason": null
-        },
-        "account_owner": null,
-        "name": "INTRST PYMNT",
-        "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
-        "amount": -4.22,
-        "iso_currency_code": "USD",
-        "unofficial_currency_code": null,
-        "date": "2022-09-27",
-        "pending": false,
-        "transaction_id": "bL57RZXQZ7C8NnZj9RrLCXAPKpZRWWF3WJXX9",
-        "payment_channel": "other",
-        "authorized_date": "2022-09-27",
-        "authorized_datetime": null,
-        "datetime": null,
-        "transaction_code": null,
-        "check_number": null,
-        "merchant_name": null,
-        "personal_finance_category": null,
-        "transaction_type": "special"
-      },
-      {
-        "pending_transaction_id": null,
-        "category_id": "16001000",
-        "category": [
-          "Payment",
-          "Credit Card"
-        ],
-        "location": {
-          "address": null,
-          "city": null,
-          "region": null,
-          "postal_code": null,
-          "country": null,
-          "lat": null,
-          "lon": null,
-          "store_number": null
-        },
-        "payment_meta": {
-          "reference_number": null,
-          "ppd_id": null,
-          "payee": null,
-          "by_order_of": null,
-          "payer": null,
-          "payment_method": null,
-          "payment_processor": null,
-          "reason": null
-        },
-        "account_owner": null,
-        "name": "CREDIT CARD 3333 PAYMENT *//",
-        "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
-        "amount": 25.0,
-        "iso_currency_code": "USD",
-        "unofficial_currency_code": null,
-        "date": "2022-09-02",
-        "pending": false,
-        "transaction_id": "mm4E6vDZvEfjJdZAnG4efkn3NeDL88FA1lDDR",
-        "payment_channel": "other",
-        "authorized_date": "2022-09-01",
-        "authorized_datetime": null,
-        "datetime": null,
-        "transaction_code": null,
-        "check_number": null,
-        "merchant_name": null,
-        "personal_finance_category": null,
-        "transaction_type": "special"
-      }
-    ],
-    "total_transactions": 7,
-    "item": {
-      "item_id": "xapz6vqwvzIW8NGlnr5kCeBQ5MG6DEcn9rvlw",
-      "webhook": "",
-      "error": null,
-      "available_products": [
-        "assets",
-        "balance",
-        "credit_details",
-        "identity",
-        "income",
-        "recurring_transactions"
-      ],
-      "billed_products": [
-        "auth",
-        "investments",
-        "liabilities",
-        "transactions"
-      ],
-      "consent_expiration_time": null,
-      "update_type": "background",
-      "institution_id": "ins_56",
-      "optional_products": null,
-      "products": [
-        "auth",
-        "investments",
-        "liabilities",
-        "transactions"
-      ]
+        "request_id": "2bP2SnmHQjyD8dZ",
+        "status": {
+            "investments": {
+                "last_failed_update": "2022-12-16 19:47:42.457000+00:00",
+                "last_successful_update": "2022-12-16 19:48:02.587000+00:00"
+            },
+            "last_webhook": null,
+            "transactions": {
+                "last_failed_update": "2022-12-16 19:47:42.457000+00:00",
+                "last_successful_update": "2023-01-09 23:58:41.809000+00:00"
+            }
+        }
     },
-    "request_id": "BADE6fBK6XcpSCV"
-  }
+    "resp_transactions": {
+        "accounts": [
+            {
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "balances": {
+                    "available": 200.0,
+                    "current": 210.0,
+                    "limit": null,
+                    "iso_currency_code": "USD",
+                    "unofficial_currency_code": null
+                },
+                "mask": "1111",
+                "name": "Plaid Saving",
+                "official_name": "Plaid Silver Standard 0.1% Interest Saving",
+                "type": "depository",
+                "subtype": "savings"
+            }
+        ],
+        "transactions": [
+            {
+                "pending_transaction_id": null,
+                "category_id": "16001000",
+                "category": [
+                    "Payment",
+                    "Credit Card"
+                ],
+                "location": {
+                    "address": null,
+                    "city": null,
+                    "region": null,
+                    "postal_code": null,
+                    "country": null,
+                    "lat": null,
+                    "lon": null,
+                    "store_number": null
+                },
+                "payment_meta": {
+                    "reference_number": null,
+                    "ppd_id": null,
+                    "payee": null,
+                    "by_order_of": null,
+                    "payer": null,
+                    "payment_method": null,
+                    "payment_processor": null,
+                    "reason": null
+                },
+                "account_owner": null,
+                "name": "CREDIT CARD 3333 PAYMENT *//",
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "amount": 25.0,
+                "iso_currency_code": "USD",
+                "unofficial_currency_code": null,
+                "date": "2022-12-31",
+                "pending": false,
+                "transaction_id": "ALdjoJVbJjCPk65XvVmPFZlBLyNqkqio5bdMZ",
+                "payment_channel": "other",
+                "authorized_date": "2022-12-30",
+                "authorized_datetime": null,
+                "datetime": null,
+                "transaction_code": null,
+                "check_number": null,
+                "merchant_name": null,
+                "personal_finance_category": null,
+                "transaction_type": "special"
+            },
+            {
+                "pending_transaction_id": null,
+                "category_id": "21005000",
+                "category": [
+                    "Transfer",
+                    "Credit"
+                ],
+                "location": {
+                    "address": null,
+                    "city": null,
+                    "region": null,
+                    "postal_code": null,
+                    "country": null,
+                    "lat": null,
+                    "lon": null,
+                    "store_number": null
+                },
+                "payment_meta": {
+                    "reference_number": null,
+                    "ppd_id": null,
+                    "payee": null,
+                    "by_order_of": null,
+                    "payer": null,
+                    "payment_method": null,
+                    "payment_processor": null,
+                    "reason": null
+                },
+                "account_owner": null,
+                "name": "INTRST PYMNT",
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "amount": -4.22,
+                "iso_currency_code": "USD",
+                "unofficial_currency_code": null,
+                "date": "2022-12-26",
+                "pending": false,
+                "transaction_id": "pqjG6vDpvGILXqg6174AC5WlPM79jKiEynm3Q",
+                "payment_channel": "other",
+                "authorized_date": "2022-12-26",
+                "authorized_datetime": null,
+                "datetime": null,
+                "transaction_code": null,
+                "check_number": null,
+                "merchant_name": null,
+                "personal_finance_category": null,
+                "transaction_type": "special"
+            },
+            {
+                "pending_transaction_id": null,
+                "category_id": "16001000",
+                "category": [
+                    "Payment",
+                    "Credit Card"
+                ],
+                "location": {
+                    "address": null,
+                    "city": null,
+                    "region": null,
+                    "postal_code": null,
+                    "country": null,
+                    "lat": null,
+                    "lon": null,
+                    "store_number": null
+                },
+                "payment_meta": {
+                    "reference_number": null,
+                    "ppd_id": null,
+                    "payee": null,
+                    "by_order_of": null,
+                    "payer": null,
+                    "payment_method": null,
+                    "payment_processor": null,
+                    "reason": null
+                },
+                "account_owner": null,
+                "name": "CREDIT CARD 3333 PAYMENT *//",
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "amount": 25.0,
+                "iso_currency_code": "USD",
+                "unofficial_currency_code": null,
+                "date": "2022-12-01",
+                "pending": false,
+                "transaction_id": "E8PZLJKEJZu41y7QElLXF1dLrNBojjfEoMqqR",
+                "payment_channel": "other",
+                "authorized_date": "2022-11-30",
+                "authorized_datetime": null,
+                "datetime": null,
+                "transaction_code": null,
+                "check_number": null,
+                "merchant_name": null,
+                "personal_finance_category": null,
+                "transaction_type": "special"
+            },
+            {
+                "pending_transaction_id": null,
+                "category_id": "21005000",
+                "category": [
+                    "Transfer",
+                    "Credit"
+                ],
+                "location": {
+                    "address": null,
+                    "city": null,
+                    "region": null,
+                    "postal_code": null,
+                    "country": null,
+                    "lat": null,
+                    "lon": null,
+                    "store_number": null
+                },
+                "payment_meta": {
+                    "reference_number": null,
+                    "ppd_id": null,
+                    "payee": null,
+                    "by_order_of": null,
+                    "payer": null,
+                    "payment_method": null,
+                    "payment_processor": null,
+                    "reason": null
+                },
+                "account_owner": null,
+                "name": "INTRST PYMNT",
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "amount": -4.22,
+                "iso_currency_code": "USD",
+                "unofficial_currency_code": null,
+                "date": "2022-11-26",
+                "pending": false,
+                "transaction_id": "WabrB3Mg3rIMVR8qngbPi7ay3ZA8XXt4p5kkM",
+                "payment_channel": "other",
+                "authorized_date": "2022-11-26",
+                "authorized_datetime": null,
+                "datetime": null,
+                "transaction_code": null,
+                "check_number": null,
+                "merchant_name": null,
+                "personal_finance_category": null,
+                "transaction_type": "special"
+            },
+            {
+                "pending_transaction_id": null,
+                "category_id": "16001000",
+                "category": [
+                    "Payment",
+                    "Credit Card"
+                ],
+                "location": {
+                    "address": null,
+                    "city": null,
+                    "region": null,
+                    "postal_code": null,
+                    "country": null,
+                    "lat": null,
+                    "lon": null,
+                    "store_number": null
+                },
+                "payment_meta": {
+                    "reference_number": null,
+                    "ppd_id": null,
+                    "payee": null,
+                    "by_order_of": null,
+                    "payer": null,
+                    "payment_method": null,
+                    "payment_processor": null,
+                    "reason": null
+                },
+                "account_owner": null,
+                "name": "CREDIT CARD 3333 PAYMENT *//",
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "amount": 25.0,
+                "iso_currency_code": "USD",
+                "unofficial_currency_code": null,
+                "date": "2022-11-01",
+                "pending": false,
+                "transaction_id": "ALdjoJVbJjCPk65XvVmGiezL7mwDggTogkQQD",
+                "payment_channel": "other",
+                "authorized_date": "2022-10-31",
+                "authorized_datetime": null,
+                "datetime": null,
+                "transaction_code": null,
+                "check_number": null,
+                "merchant_name": null,
+                "personal_finance_category": null,
+                "transaction_type": "special"
+            },
+            {
+                "pending_transaction_id": null,
+                "category_id": "21005000",
+                "category": [
+                    "Transfer",
+                    "Credit"
+                ],
+                "location": {
+                    "address": null,
+                    "city": null,
+                    "region": null,
+                    "postal_code": null,
+                    "country": null,
+                    "lat": null,
+                    "lon": null,
+                    "store_number": null
+                },
+                "payment_meta": {
+                    "reference_number": null,
+                    "ppd_id": null,
+                    "payee": null,
+                    "by_order_of": null,
+                    "payer": null,
+                    "payment_method": null,
+                    "payment_processor": null,
+                    "reason": null
+                },
+                "account_owner": null,
+                "name": "INTRST PYMNT",
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "amount": -4.22,
+                "iso_currency_code": "USD",
+                "unofficial_currency_code": null,
+                "date": "2022-10-27",
+                "pending": false,
+                "transaction_id": "GW71VJzBJ1iW4ZzbGm8gCojQPda4XXfnbL55d",
+                "payment_channel": "other",
+                "authorized_date": "2022-10-27",
+                "authorized_datetime": null,
+                "datetime": null,
+                "transaction_code": null,
+                "check_number": null,
+                "merchant_name": null,
+                "personal_finance_category": null,
+                "transaction_type": "special"
+            },
+            {
+                "pending_transaction_id": null,
+                "category_id": "16001000",
+                "category": [
+                    "Payment",
+                    "Credit Card"
+                ],
+                "location": {
+                    "address": null,
+                    "city": null,
+                    "region": null,
+                    "postal_code": null,
+                    "country": null,
+                    "lat": null,
+                    "lon": null,
+                    "store_number": null
+                },
+                "payment_meta": {
+                    "reference_number": null,
+                    "ppd_id": null,
+                    "payee": null,
+                    "by_order_of": null,
+                    "payer": null,
+                    "payment_method": null,
+                    "payment_processor": null,
+                    "reason": null
+                },
+                "account_owner": null,
+                "name": "CREDIT CARD 3333 PAYMENT *//",
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "amount": 25.0,
+                "iso_currency_code": "USD",
+                "unofficial_currency_code": null,
+                "date": "2022-10-02",
+                "pending": false,
+                "transaction_id": "nyNW6vD1vWfJagXRjoQMilNZEwj199cGzXjjX",
+                "payment_channel": "other",
+                "authorized_date": "2022-10-01",
+                "authorized_datetime": null,
+                "datetime": null,
+                "transaction_code": null,
+                "check_number": null,
+                "merchant_name": null,
+                "personal_finance_category": null,
+                "transaction_type": "special"
+            },
+            {
+                "pending_transaction_id": null,
+                "category_id": "21005000",
+                "category": [
+                    "Transfer",
+                    "Credit"
+                ],
+                "location": {
+                    "address": null,
+                    "city": null,
+                    "region": null,
+                    "postal_code": null,
+                    "country": null,
+                    "lat": null,
+                    "lon": null,
+                    "store_number": null
+                },
+                "payment_meta": {
+                    "reference_number": null,
+                    "ppd_id": null,
+                    "payee": null,
+                    "by_order_of": null,
+                    "payer": null,
+                    "payment_method": null,
+                    "payment_processor": null,
+                    "reason": null
+                },
+                "account_owner": null,
+                "name": "INTRST PYMNT",
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "amount": -4.22,
+                "iso_currency_code": "USD",
+                "unofficial_currency_code": null,
+                "date": "2022-09-27",
+                "pending": false,
+                "transaction_id": "bL57RZXQZ7C8NnZj9RrLCXAPKpZRWWF3WJXX9",
+                "payment_channel": "other",
+                "authorized_date": "2022-09-27",
+                "authorized_datetime": null,
+                "datetime": null,
+                "transaction_code": null,
+                "check_number": null,
+                "merchant_name": null,
+                "personal_finance_category": null,
+                "transaction_type": "special"
+            },
+            {
+                "pending_transaction_id": null,
+                "category_id": "16001000",
+                "category": [
+                    "Payment",
+                    "Credit Card"
+                ],
+                "location": {
+                    "address": null,
+                    "city": null,
+                    "region": null,
+                    "postal_code": null,
+                    "country": null,
+                    "lat": null,
+                    "lon": null,
+                    "store_number": null
+                },
+                "payment_meta": {
+                    "reference_number": null,
+                    "ppd_id": null,
+                    "payee": null,
+                    "by_order_of": null,
+                    "payer": null,
+                    "payment_method": null,
+                    "payment_processor": null,
+                    "reason": null
+                },
+                "account_owner": null,
+                "name": "CREDIT CARD 3333 PAYMENT *//",
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "amount": 25.0,
+                "iso_currency_code": "USD",
+                "unofficial_currency_code": null,
+                "date": "2022-09-02",
+                "pending": false,
+                "transaction_id": "mm4E6vDZvEfjJdZAnG4efkn3NeDL88FA1lDDR",
+                "payment_channel": "other",
+                "authorized_date": "2022-09-01",
+                "authorized_datetime": null,
+                "datetime": null,
+                "transaction_code": null,
+                "check_number": null,
+                "merchant_name": null,
+                "personal_finance_category": null,
+                "transaction_type": "special"
+            },
+            {
+                "pending_transaction_id": null,
+                "category_id": "21005000",
+                "category": [
+                    "Transfer",
+                    "Credit"
+                ],
+                "location": {
+                    "address": null,
+                    "city": null,
+                    "region": null,
+                    "postal_code": null,
+                    "country": null,
+                    "lat": null,
+                    "lon": null,
+                    "store_number": null
+                },
+                "payment_meta": {
+                    "reference_number": null,
+                    "ppd_id": null,
+                    "payee": null,
+                    "by_order_of": null,
+                    "payer": null,
+                    "payment_method": null,
+                    "payment_processor": null,
+                    "reason": null
+                },
+                "account_owner": null,
+                "name": "INTRST PYMNT",
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "amount": -4.22,
+                "iso_currency_code": "USD",
+                "unofficial_currency_code": null,
+                "date": "2022-08-28",
+                "pending": false,
+                "transaction_id": "y4oB6wKzwBfreP71LaDJfGA6d1zMoocDEZzzr",
+                "payment_channel": "other",
+                "authorized_date": "2022-08-28",
+                "authorized_datetime": null,
+                "datetime": null,
+                "transaction_code": null,
+                "check_number": null,
+                "merchant_name": null,
+                "personal_finance_category": null,
+                "transaction_type": "special"
+            },
+            {
+                "pending_transaction_id": null,
+                "category_id": "16001000",
+                "category": [
+                    "Payment",
+                    "Credit Card"
+                ],
+                "location": {
+                    "address": null,
+                    "city": null,
+                    "region": null,
+                    "postal_code": null,
+                    "country": null,
+                    "lat": null,
+                    "lon": null,
+                    "store_number": null
+                },
+                "payment_meta": {
+                    "reference_number": null,
+                    "ppd_id": null,
+                    "payee": null,
+                    "by_order_of": null,
+                    "payer": null,
+                    "payment_method": null,
+                    "payment_processor": null,
+                    "reason": null
+                },
+                "account_owner": null,
+                "name": "CREDIT CARD 3333 PAYMENT *//",
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "amount": 25.0,
+                "iso_currency_code": "USD",
+                "unofficial_currency_code": null,
+                "date": "2022-08-03",
+                "pending": false,
+                "transaction_id": "9PlBoJ7NJBuZbVe93vGXsxg9L6yZqqfEZ3ppR",
+                "payment_channel": "other",
+                "authorized_date": "2022-08-02",
+                "authorized_datetime": null,
+                "datetime": null,
+                "transaction_code": null,
+                "check_number": null,
+                "merchant_name": null,
+                "personal_finance_category": null,
+                "transaction_type": "special"
+            },
+            {
+                "pending_transaction_id": null,
+                "category_id": "21005000",
+                "category": [
+                    "Transfer",
+                    "Credit"
+                ],
+                "location": {
+                    "address": null,
+                    "city": null,
+                    "region": null,
+                    "postal_code": null,
+                    "country": null,
+                    "lat": null,
+                    "lon": null,
+                    "store_number": null
+                },
+                "payment_meta": {
+                    "reference_number": null,
+                    "ppd_id": null,
+                    "payee": null,
+                    "by_order_of": null,
+                    "payer": null,
+                    "payment_method": null,
+                    "payment_processor": null,
+                    "reason": null
+                },
+                "account_owner": null,
+                "name": "INTRST PYMNT",
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "amount": -4.22,
+                "iso_currency_code": "USD",
+                "unofficial_currency_code": null,
+                "date": "2022-07-29",
+                "pending": false,
+                "transaction_id": "vx1K6vD9vKu3MNyno5r6cErKxmModdIX8PMMq",
+                "payment_channel": "other",
+                "authorized_date": "2022-07-29",
+                "authorized_datetime": null,
+                "datetime": null,
+                "transaction_code": null,
+                "check_number": null,
+                "merchant_name": null,
+                "personal_finance_category": null,
+                "transaction_type": "special"
+            },
+            {
+                "pending_transaction_id": null,
+                "category_id": "16001000",
+                "category": [
+                    "Payment",
+                    "Credit Card"
+                ],
+                "location": {
+                    "address": null,
+                    "city": null,
+                    "region": null,
+                    "postal_code": null,
+                    "country": null,
+                    "lat": null,
+                    "lon": null,
+                    "store_number": null
+                },
+                "payment_meta": {
+                    "reference_number": null,
+                    "ppd_id": null,
+                    "payee": null,
+                    "by_order_of": null,
+                    "payer": null,
+                    "payment_method": null,
+                    "payment_processor": null,
+                    "reason": null
+                },
+                "account_owner": null,
+                "name": "CREDIT CARD 3333 PAYMENT *//",
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "amount": 25.0,
+                "iso_currency_code": "USD",
+                "unofficial_currency_code": null,
+                "date": "2022-07-04",
+                "pending": false,
+                "transaction_id": "RzEblqMXqbCZj3pwmveysd16NDjwbbfGnLggP",
+                "payment_channel": "other",
+                "authorized_date": "2022-07-03",
+                "authorized_datetime": null,
+                "datetime": null,
+                "transaction_code": null,
+                "check_number": null,
+                "merchant_name": null,
+                "personal_finance_category": null,
+                "transaction_type": "special"
+            },
+            {
+                "pending_transaction_id": null,
+                "category_id": "21005000",
+                "category": [
+                    "Transfer",
+                    "Credit"
+                ],
+                "location": {
+                    "address": null,
+                    "city": null,
+                    "region": null,
+                    "postal_code": null,
+                    "country": null,
+                    "lat": null,
+                    "lon": null,
+                    "store_number": null
+                },
+                "payment_meta": {
+                    "reference_number": null,
+                    "ppd_id": null,
+                    "payee": null,
+                    "by_order_of": null,
+                    "payer": null,
+                    "payment_method": null,
+                    "payment_processor": null,
+                    "reason": null
+                },
+                "account_owner": null,
+                "name": "INTRST PYMNT",
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "amount": -4.22,
+                "iso_currency_code": "USD",
+                "unofficial_currency_code": null,
+                "date": "2022-06-29",
+                "pending": false,
+                "transaction_id": "6aVKkp6NpKI1ELlnwmR7inJBWP7ykkixdqBBb",
+                "payment_channel": "other",
+                "authorized_date": "2022-06-29",
+                "authorized_datetime": null,
+                "datetime": null,
+                "transaction_code": null,
+                "check_number": null,
+                "merchant_name": null,
+                "personal_finance_category": null,
+                "transaction_type": "special"
+            },
+            {
+                "pending_transaction_id": null,
+                "category_id": "16001000",
+                "category": [
+                    "Payment",
+                    "Credit Card"
+                ],
+                "location": {
+                    "address": null,
+                    "city": null,
+                    "region": null,
+                    "postal_code": null,
+                    "country": null,
+                    "lat": null,
+                    "lon": null,
+                    "store_number": null
+                },
+                "payment_meta": {
+                    "reference_number": null,
+                    "ppd_id": null,
+                    "payee": null,
+                    "by_order_of": null,
+                    "payer": null,
+                    "payment_method": null,
+                    "payment_processor": null,
+                    "reason": null
+                },
+                "account_owner": null,
+                "name": "CREDIT CARD 3333 PAYMENT *//",
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "amount": 25.0,
+                "iso_currency_code": "USD",
+                "unofficial_currency_code": null,
+                "date": "2022-06-04",
+                "pending": false,
+                "transaction_id": "X4mk3xGExkf3DN8R6zP5cQlx8zgqLLcxermmx",
+                "payment_channel": "other",
+                "authorized_date": "2022-06-03",
+                "authorized_datetime": null,
+                "datetime": null,
+                "transaction_code": null,
+                "check_number": null,
+                "merchant_name": null,
+                "personal_finance_category": null,
+                "transaction_type": "special"
+            },
+            {
+                "pending_transaction_id": null,
+                "category_id": "21005000",
+                "category": [
+                    "Transfer",
+                    "Credit"
+                ],
+                "location": {
+                    "address": null,
+                    "city": null,
+                    "region": null,
+                    "postal_code": null,
+                    "country": null,
+                    "lat": null,
+                    "lon": null,
+                    "store_number": null
+                },
+                "payment_meta": {
+                    "reference_number": null,
+                    "ppd_id": null,
+                    "payee": null,
+                    "by_order_of": null,
+                    "payer": null,
+                    "payment_method": null,
+                    "payment_processor": null,
+                    "reason": null
+                },
+                "account_owner": null,
+                "name": "INTRST PYMNT",
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "amount": -4.22,
+                "iso_currency_code": "USD",
+                "unofficial_currency_code": null,
+                "date": "2022-05-30",
+                "pending": false,
+                "transaction_id": "DgNQEJqjJQsAzZV3p97gtVpZgMejXXuX6r55n",
+                "payment_channel": "other",
+                "authorized_date": "2022-05-30",
+                "authorized_datetime": null,
+                "datetime": null,
+                "transaction_code": null,
+                "check_number": null,
+                "merchant_name": null,
+                "personal_finance_category": null,
+                "transaction_type": "special"
+            },
+            {
+                "pending_transaction_id": null,
+                "category_id": "16001000",
+                "category": [
+                    "Payment",
+                    "Credit Card"
+                ],
+                "location": {
+                    "address": null,
+                    "city": null,
+                    "region": null,
+                    "postal_code": null,
+                    "country": null,
+                    "lat": null,
+                    "lon": null,
+                    "store_number": null
+                },
+                "payment_meta": {
+                    "reference_number": null,
+                    "ppd_id": null,
+                    "payee": null,
+                    "by_order_of": null,
+                    "payer": null,
+                    "payment_method": null,
+                    "payment_processor": null,
+                    "reason": null
+                },
+                "account_owner": null,
+                "name": "CREDIT CARD 3333 PAYMENT *//",
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "amount": 25.0,
+                "iso_currency_code": "USD",
+                "unofficial_currency_code": null,
+                "date": "2022-05-05",
+                "pending": false,
+                "transaction_id": "VdnKzBLGBKfZVGg7416zsLA4QekJWWCnKvBBo",
+                "payment_channel": "other",
+                "authorized_date": "2022-05-04",
+                "authorized_datetime": null,
+                "datetime": null,
+                "transaction_code": null,
+                "check_number": null,
+                "merchant_name": null,
+                "personal_finance_category": null,
+                "transaction_type": "special"
+            },
+            {
+                "pending_transaction_id": null,
+                "category_id": "21005000",
+                "category": [
+                    "Transfer",
+                    "Credit"
+                ],
+                "location": {
+                    "address": null,
+                    "city": null,
+                    "region": null,
+                    "postal_code": null,
+                    "country": null,
+                    "lat": null,
+                    "lon": null,
+                    "store_number": null
+                },
+                "payment_meta": {
+                    "reference_number": null,
+                    "ppd_id": null,
+                    "payee": null,
+                    "by_order_of": null,
+                    "payer": null,
+                    "payment_method": null,
+                    "payment_processor": null,
+                    "reason": null
+                },
+                "account_owner": null,
+                "name": "INTRST PYMNT",
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "amount": -4.22,
+                "iso_currency_code": "USD",
+                "unofficial_currency_code": null,
+                "date": "2022-04-30",
+                "pending": false,
+                "transaction_id": "wdLr6vl9vrf3JLZwd9b8cZWQ4zbPvvclWabbQ",
+                "payment_channel": "other",
+                "authorized_date": "2022-04-30",
+                "authorized_datetime": null,
+                "datetime": null,
+                "transaction_code": null,
+                "check_number": null,
+                "merchant_name": null,
+                "personal_finance_category": null,
+                "transaction_type": "special"
+            },
+            {
+                "pending_transaction_id": null,
+                "category_id": "16001000",
+                "category": [
+                    "Payment",
+                    "Credit Card"
+                ],
+                "location": {
+                    "address": null,
+                    "city": null,
+                    "region": null,
+                    "postal_code": null,
+                    "country": null,
+                    "lat": null,
+                    "lon": null,
+                    "store_number": null
+                },
+                "payment_meta": {
+                    "reference_number": null,
+                    "ppd_id": null,
+                    "payee": null,
+                    "by_order_of": null,
+                    "payer": null,
+                    "payment_method": null,
+                    "payment_processor": null,
+                    "reason": null
+                },
+                "account_owner": null,
+                "name": "CREDIT CARD 3333 PAYMENT *//",
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "amount": 25.0,
+                "iso_currency_code": "USD",
+                "unofficial_currency_code": null,
+                "date": "2022-04-05",
+                "pending": false,
+                "transaction_id": "5dDqXkbGkqf9Dem56zXjuVyEo1dZbbupNE11J",
+                "payment_channel": "other",
+                "authorized_date": "2022-04-04",
+                "authorized_datetime": null,
+                "datetime": null,
+                "transaction_code": null,
+                "check_number": null,
+                "merchant_name": null,
+                "personal_finance_category": null,
+                "transaction_type": "special"
+            },
+            {
+                "pending_transaction_id": null,
+                "category_id": "21005000",
+                "category": [
+                    "Transfer",
+                    "Credit"
+                ],
+                "location": {
+                    "address": null,
+                    "city": null,
+                    "region": null,
+                    "postal_code": null,
+                    "country": null,
+                    "lat": null,
+                    "lon": null,
+                    "store_number": null
+                },
+                "payment_meta": {
+                    "reference_number": null,
+                    "ppd_id": null,
+                    "payee": null,
+                    "by_order_of": null,
+                    "payer": null,
+                    "payment_method": null,
+                    "payment_processor": null,
+                    "reason": null
+                },
+                "account_owner": null,
+                "name": "INTRST PYMNT",
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "amount": -4.22,
+                "iso_currency_code": "USD",
+                "unofficial_currency_code": null,
+                "date": "2022-03-31",
+                "pending": false,
+                "transaction_id": "JnZoyJxRJoFbKnmEjL1ah9NeDPjXkkF5RGDDw",
+                "payment_channel": "other",
+                "authorized_date": "2022-03-31",
+                "authorized_datetime": null,
+                "datetime": null,
+                "transaction_code": null,
+                "check_number": null,
+                "merchant_name": null,
+                "personal_finance_category": null,
+                "transaction_type": "special"
+            },
+            {
+                "pending_transaction_id": null,
+                "category_id": "16001000",
+                "category": [
+                    "Payment",
+                    "Credit Card"
+                ],
+                "location": {
+                    "address": null,
+                    "city": null,
+                    "region": null,
+                    "postal_code": null,
+                    "country": null,
+                    "lat": null,
+                    "lon": null,
+                    "store_number": null
+                },
+                "payment_meta": {
+                    "reference_number": null,
+                    "ppd_id": null,
+                    "payee": null,
+                    "by_order_of": null,
+                    "payer": null,
+                    "payment_method": null,
+                    "payment_processor": null,
+                    "reason": null
+                },
+                "account_owner": null,
+                "name": "CREDIT CARD 3333 PAYMENT *//",
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "amount": 25.0,
+                "iso_currency_code": "USD",
+                "unofficial_currency_code": null,
+                "date": "2022-03-06",
+                "pending": false,
+                "transaction_id": "kndgRvDjvgFnPJdwDBLjHlzpeNGm77c8Z3llR",
+                "payment_channel": "other",
+                "authorized_date": "2022-03-05",
+                "authorized_datetime": null,
+                "datetime": null,
+                "transaction_code": null,
+                "check_number": null,
+                "merchant_name": null,
+                "personal_finance_category": null,
+                "transaction_type": "special"
+            },
+            {
+                "pending_transaction_id": null,
+                "category_id": "21005000",
+                "category": [
+                    "Transfer",
+                    "Credit"
+                ],
+                "location": {
+                    "address": null,
+                    "city": null,
+                    "region": null,
+                    "postal_code": null,
+                    "country": null,
+                    "lat": null,
+                    "lon": null,
+                    "store_number": null
+                },
+                "payment_meta": {
+                    "reference_number": null,
+                    "ppd_id": null,
+                    "payee": null,
+                    "by_order_of": null,
+                    "payer": null,
+                    "payment_method": null,
+                    "payment_processor": null,
+                    "reason": null
+                },
+                "account_owner": null,
+                "name": "INTRST PYMNT",
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "amount": -4.22,
+                "iso_currency_code": "USD",
+                "unofficial_currency_code": null,
+                "date": "2022-03-01",
+                "pending": false,
+                "transaction_id": "lba8R6D568uraJgQw6RZfVjLv85qBBurb5VVG",
+                "payment_channel": "other",
+                "authorized_date": "2022-03-01",
+                "authorized_datetime": null,
+                "datetime": null,
+                "transaction_code": null,
+                "check_number": null,
+                "merchant_name": null,
+                "personal_finance_category": null,
+                "transaction_type": "special"
+            },
+            {
+                "pending_transaction_id": null,
+                "category_id": "16001000",
+                "category": [
+                    "Payment",
+                    "Credit Card"
+                ],
+                "location": {
+                    "address": null,
+                    "city": null,
+                    "region": null,
+                    "postal_code": null,
+                    "country": null,
+                    "lat": null,
+                    "lon": null,
+                    "store_number": null
+                },
+                "payment_meta": {
+                    "reference_number": null,
+                    "ppd_id": null,
+                    "payee": null,
+                    "by_order_of": null,
+                    "payer": null,
+                    "payment_method": null,
+                    "payment_processor": null,
+                    "reason": null
+                },
+                "account_owner": null,
+                "name": "CREDIT CARD 3333 PAYMENT *//",
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "amount": 25.0,
+                "iso_currency_code": "USD",
+                "unofficial_currency_code": null,
+                "date": "2022-02-04",
+                "pending": false,
+                "transaction_id": "qK7n6vDpvnhp5KA8DBjlf1Z3mnzbjjfVw5zze",
+                "payment_channel": "other",
+                "authorized_date": "2022-02-03",
+                "authorized_datetime": null,
+                "datetime": null,
+                "transaction_code": null,
+                "check_number": null,
+                "merchant_name": null,
+                "personal_finance_category": null,
+                "transaction_type": "special"
+            },
+            {
+                "pending_transaction_id": null,
+                "category_id": "21005000",
+                "category": [
+                    "Transfer",
+                    "Credit"
+                ],
+                "location": {
+                    "address": null,
+                    "city": null,
+                    "region": null,
+                    "postal_code": null,
+                    "country": null,
+                    "lat": null,
+                    "lon": null,
+                    "store_number": null
+                },
+                "payment_meta": {
+                    "reference_number": null,
+                    "ppd_id": null,
+                    "payee": null,
+                    "by_order_of": null,
+                    "payer": null,
+                    "payment_method": null,
+                    "payment_processor": null,
+                    "reason": null
+                },
+                "account_owner": null,
+                "name": "INTRST PYMNT",
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "amount": -4.22,
+                "iso_currency_code": "USD",
+                "unofficial_currency_code": null,
+                "date": "2022-01-30",
+                "pending": false,
+                "transaction_id": "KbMgLJd9Jguwg36ebX79uD3q1Q8oGGimzjxx4",
+                "payment_channel": "other",
+                "authorized_date": "2022-01-30",
+                "authorized_datetime": null,
+                "datetime": null,
+                "transaction_code": null,
+                "check_number": null,
+                "merchant_name": null,
+                "personal_finance_category": null,
+                "transaction_type": "special"
+            },
+            {
+                "pending_transaction_id": null,
+                "category_id": "16001000",
+                "category": [
+                    "Payment",
+                    "Credit Card"
+                ],
+                "location": {
+                    "address": null,
+                    "city": null,
+                    "region": null,
+                    "postal_code": null,
+                    "country": null,
+                    "lat": null,
+                    "lon": null,
+                    "store_number": null
+                },
+                "payment_meta": {
+                    "reference_number": null,
+                    "ppd_id": null,
+                    "payee": null,
+                    "by_order_of": null,
+                    "payer": null,
+                    "payment_method": null,
+                    "payment_processor": null,
+                    "reason": null
+                },
+                "account_owner": null,
+                "name": "CREDIT CARD 3333 PAYMENT *//",
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "amount": 25.0,
+                "iso_currency_code": "USD",
+                "unofficial_currency_code": null,
+                "date": "2022-01-05",
+                "pending": false,
+                "transaction_id": "rreb6vDyvbiJRrD4bkXWiEndjZexllIDZXee8",
+                "payment_channel": "other",
+                "authorized_date": "2022-01-04",
+                "authorized_datetime": null,
+                "datetime": null,
+                "transaction_code": null,
+                "check_number": null,
+                "merchant_name": null,
+                "personal_finance_category": null,
+                "transaction_type": "special"
+            }
+        ],
+        "total_transactions": 25,
+        "item": {
+            "item_id": "xapz6vqwvzIW8NGlnr5kCeBQ5MG6DEcn9rvlw",
+            "webhook": "",
+            "error": null,
+            "available_products": [
+                "assets",
+                "balance",
+                "credit_details",
+                "identity",
+                "income",
+                "recurring_transactions"
+            ],
+            "billed_products": [
+                "auth",
+                "investments",
+                "liabilities",
+                "transactions"
+            ],
+            "consent_expiration_time": null,
+            "update_type": "background",
+            "institution_id": "ins_56",
+            "optional_products": null,
+            "products": [
+                "auth",
+                "investments",
+                "liabilities",
+                "transactions"
+            ]
+        },
+        "request_id": "ZRzhgXHWtMciovU"
+    },
+    "resp_investment_transactions": {
+        "item": {
+            "item_id": "xapz6vqwvzIW8NGlnr5kCeBQ5MG6DEcn9rvlw",
+            "webhook": "",
+            "error": null,
+            "available_products": [
+                "assets",
+                "balance",
+                "credit_details",
+                "identity",
+                "income",
+                "recurring_transactions"
+            ],
+            "billed_products": [
+                "auth",
+                "investments",
+                "liabilities",
+                "transactions"
+            ],
+            "consent_expiration_time": null,
+            "update_type": "background",
+            "institution_id": "ins_56",
+            "optional_products": null,
+            "products": [
+                "auth",
+                "investments",
+                "liabilities",
+                "transactions"
+            ]
+        },
+        "accounts": [
+            {
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "balances": {
+                    "available": 200.0,
+                    "current": 210.0,
+                    "limit": null,
+                    "iso_currency_code": "USD",
+                    "unofficial_currency_code": null
+                },
+                "mask": "1111",
+                "name": "Plaid Saving",
+                "official_name": "Plaid Silver Standard 0.1% Interest Saving",
+                "type": "depository",
+                "subtype": "savings"
+            }
+        ],
+        "securities": [],
+        "investment_transactions": [],
+        "total_investment_transactions": 0,
+        "request_id": "uYDEPs0RvOt3YH8"
+    },
+    "resp_investment_holdings": {
+        "accounts": [
+            {
+                "account_id": "lba8R6D568uraJgQw6RZfVjRBjjxzBurLjM89",
+                "balances": {
+                    "available": 200.0,
+                    "current": 210.0,
+                    "limit": null,
+                    "iso_currency_code": "USD",
+                    "unofficial_currency_code": null
+                },
+                "mask": "1111",
+                "name": "Plaid Saving",
+                "official_name": "Plaid Silver Standard 0.1% Interest Saving",
+                "type": "depository",
+                "subtype": "savings"
+            }
+        ],
+        "holdings": [],
+        "securities": [],
+        "item": {
+            "item_id": "xapz6vqwvzIW8NGlnr5kCeBQ5MG6DEcn9rvlw",
+            "webhook": "",
+            "error": null,
+            "available_products": [
+                "assets",
+                "balance",
+                "credit_details",
+                "identity",
+                "income",
+                "recurring_transactions"
+            ],
+            "billed_products": [
+                "auth",
+                "investments",
+                "liabilities",
+                "transactions"
+            ],
+            "consent_expiration_time": null,
+            "update_type": "background",
+            "institution_id": "ins_56",
+            "optional_products": null,
+            "products": [
+                "auth",
+                "investments",
+                "liabilities",
+                "transactions"
+            ]
+        },
+        "request_id": "FIeyyRlBfVQJG3m"
+    }
 }

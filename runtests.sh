@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python3 plaid_bank.py test tests/plaid
+python3 plaid.py test tests/plaid

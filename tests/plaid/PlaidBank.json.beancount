@@ -2,6 +2,86 @@
 ;; Date: 
 ;; Name: PlaidSampleBank.json
 
+2022-01-05 * "CREDIT CARD 3333 PAYMENT *//"
+  Assets:Current:PlaidSampleBank  -25.0 USD
+    transaction_id: "rreb6vDyvbiJRrD4bkXWiEndjZexllIDZXee8"
+  Expenses:Payment:Credit-Card     25.0 USD
+
+2022-01-30 * "INTRST PYMNT"
+  Assets:Current:PlaidSampleBank   4.22 USD
+    transaction_id: "KbMgLJd9Jguwg36ebX79uD3q1Q8oGGimzjxx4"
+  Expenses:Transfer:Credit        -4.22 USD
+
+2022-02-04 * "CREDIT CARD 3333 PAYMENT *//"
+  Assets:Current:PlaidSampleBank  -25.0 USD
+    transaction_id: "qK7n6vDpvnhp5KA8DBjlf1Z3mnzbjjfVw5zze"
+  Expenses:Payment:Credit-Card     25.0 USD
+
+2022-03-01 * "INTRST PYMNT"
+  Assets:Current:PlaidSampleBank   4.22 USD
+    transaction_id: "lba8R6D568uraJgQw6RZfVjLv85qBBurb5VVG"
+  Expenses:Transfer:Credit        -4.22 USD
+
+2022-03-06 * "CREDIT CARD 3333 PAYMENT *//"
+  Assets:Current:PlaidSampleBank  -25.0 USD
+    transaction_id: "kndgRvDjvgFnPJdwDBLjHlzpeNGm77c8Z3llR"
+  Expenses:Payment:Credit-Card     25.0 USD
+
+2022-03-31 * "INTRST PYMNT"
+  Assets:Current:PlaidSampleBank   4.22 USD
+    transaction_id: "JnZoyJxRJoFbKnmEjL1ah9NeDPjXkkF5RGDDw"
+  Expenses:Transfer:Credit        -4.22 USD
+
+2022-04-05 * "CREDIT CARD 3333 PAYMENT *//"
+  Assets:Current:PlaidSampleBank  -25.0 USD
+    transaction_id: "5dDqXkbGkqf9Dem56zXjuVyEo1dZbbupNE11J"
+  Expenses:Payment:Credit-Card     25.0 USD
+
+2022-04-30 * "INTRST PYMNT"
+  Assets:Current:PlaidSampleBank   4.22 USD
+    transaction_id: "wdLr6vl9vrf3JLZwd9b8cZWQ4zbPvvclWabbQ"
+  Expenses:Transfer:Credit        -4.22 USD
+
+2022-05-05 * "CREDIT CARD 3333 PAYMENT *//"
+  Assets:Current:PlaidSampleBank  -25.0 USD
+    transaction_id: "VdnKzBLGBKfZVGg7416zsLA4QekJWWCnKvBBo"
+  Expenses:Payment:Credit-Card     25.0 USD
+
+2022-05-30 * "INTRST PYMNT"
+  Assets:Current:PlaidSampleBank   4.22 USD
+    transaction_id: "DgNQEJqjJQsAzZV3p97gtVpZgMejXXuX6r55n"
+  Expenses:Transfer:Credit        -4.22 USD
+
+2022-06-04 * "CREDIT CARD 3333 PAYMENT *//"
+  Assets:Current:PlaidSampleBank  -25.0 USD
+    transaction_id: "X4mk3xGExkf3DN8R6zP5cQlx8zgqLLcxermmx"
+  Expenses:Payment:Credit-Card     25.0 USD
+
+2022-06-29 * "INTRST PYMNT"
+  Assets:Current:PlaidSampleBank   4.22 USD
+    transaction_id: "6aVKkp6NpKI1ELlnwmR7inJBWP7ykkixdqBBb"
+  Expenses:Transfer:Credit        -4.22 USD
+
+2022-07-04 * "CREDIT CARD 3333 PAYMENT *//"
+  Assets:Current:PlaidSampleBank  -25.0 USD
+    transaction_id: "RzEblqMXqbCZj3pwmveysd16NDjwbbfGnLggP"
+  Expenses:Payment:Credit-Card     25.0 USD
+
+2022-07-29 * "INTRST PYMNT"
+  Assets:Current:PlaidSampleBank   4.22 USD
+    transaction_id: "vx1K6vD9vKu3MNyno5r6cErKxmModdIX8PMMq"
+  Expenses:Transfer:Credit        -4.22 USD
+
+2022-08-03 * "CREDIT CARD 3333 PAYMENT *//"
+  Assets:Current:PlaidSampleBank  -25.0 USD
+    transaction_id: "9PlBoJ7NJBuZbVe93vGXsxg9L6yZqqfEZ3ppR"
+  Expenses:Payment:Credit-Card     25.0 USD
+
+2022-08-28 * "INTRST PYMNT"
+  Assets:Current:PlaidSampleBank   4.22 USD
+    transaction_id: "y4oB6wKzwBfreP71LaDJfGA6d1zMoocDEZzzr"
+  Expenses:Transfer:Credit        -4.22 USD
+
 2022-09-02 * "CREDIT CARD 3333 PAYMENT *//"
   Assets:Current:PlaidSampleBank  -25.0 USD
     transaction_id: "mm4E6vDZvEfjJdZAnG4efkn3NeDL88FA1lDDR"
@@ -37,4 +117,14 @@
     transaction_id: "E8PZLJKEJZu41y7QElLXF1dLrNBojjfEoMqqR"
   Expenses:Payment:Credit-Card     25.0 USD
 
-2022-12-02 balance Assets:Current:PlaidSampleBank                  210.0 USD
+2022-12-26 * "INTRST PYMNT"
+  Assets:Current:PlaidSampleBank   4.22 USD
+    transaction_id: "pqjG6vDpvGILXqg6174AC5WlPM79jKiEynm3Q"
+  Expenses:Transfer:Credit        -4.22 USD
+
+2022-12-31 * "CREDIT CARD 3333 PAYMENT *//"
+  Assets:Current:PlaidSampleBank  -25.0 USD
+    transaction_id: "ALdjoJVbJjCPk65XvVmPFZlBLyNqkqio5bdMZ"
+  Expenses:Payment:Credit-Card     25.0 USD
+
+2023-01-10 balance Assets:Current:PlaidSampleBank                  210.0 USD
