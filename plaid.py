@@ -100,14 +100,14 @@ class Importer(beangulp.Importer):
         for entry in existing:
             if isinstance(entry, data.Transaction):
                 for posting in entry.postings:
-                    if 'transaction_id' in posting.meta:
-                        plaid_ids.add(posting.meta['transaction_id'])
+                    if 'plaid_id' in posting.meta:
+                        plaid_ids.add(posting.meta['plaid_id'])
 
         for entry in entries:
             if isinstance(entry, data.Transaction):
                 for posting in entry.postings:
-                    if posting.meta is not None and 'transaction_id' in posting.meta:
-                        if posting.meta['transaction_id'] in plaid_ids:
+                    if posting.meta is not None and 'plaid_id' in posting.meta:
+                        if posting.meta['plaid_id'] in plaid_ids:
                             meta = entry.meta.copy()
                             meta[DUPLICATE] = True
                             entry = entry._replace(meta=meta)
@@ -159,13 +159,13 @@ class Importer(beangulp.Importer):
             merchant = t['merchant_name']
             description = t['name']
             amt = str(t['amount'])
-            trans_id = t['transaction_id']
+            plaid_id = t['transaction_id']
             meta = data.new_metadata(filepath, index)
             units = amount.Amount(D(amt), currency)
             pst_account = ':'.join(t['category']).replace("'", "").replace(',', '').replace(' ', '-')
 
             # Create beancount transaction with posting
-            leg1 = data.Posting(self.account_name, -units, None, None, None, {'transaction_id': trans_id})
+            leg1 = data.Posting(self.account_name, -units, None, None, None, {'plaid_id': plaid_id})
             leg2 = data.Posting("Expenses:" + pst_account, units, None, None, None, None)
             txn = data.Transaction(meta, t_date, flags.FLAG_OKAY, merchant, description, data.EMPTY_SET, data.EMPTY_SET, [leg1, leg2])
             entries.append(txn)
@@ -233,12 +233,12 @@ class Importer(beangulp.Importer):
         t_amount = amount.Amount(D(str(transaction['amount'])), t_currency)
         t_date = parse(transaction['date']).date()
         t_name = transaction['name']
-        t_transaction_id = transaction['investment_transaction_id']
+        t_plaid_id = transaction['investment_transaction_id']
         s = securities[t_sec_id]
         s_name = s['name']
         postings = []
 
-        postings.append(data.Posting(":".join((self.account_name, self.cash_account_name)), -t_amount, None, None, None, {'transaction_id': t_transaction_id}))
+        postings.append(data.Posting(":".join((self.account_name, self.cash_account_name)), -t_amount, None, None, None, {'plaid_id': t_plaid_id}))
         txn = data.Transaction(meta, t_date, flags.FLAG_OKAY, s_name, t_name, data.EMPTY_SET, data.EMPTY_SET, postings)
         return txn
 
@@ -248,7 +248,7 @@ class Importer(beangulp.Importer):
         t_amount = amount.Amount(D(str(transaction['amount'])), t_currency)
         t_date = parse(transaction['date']).date()
         t_name = transaction['name']
-        t_transaction_id = transaction['investment_transaction_id']
+        t_plaid_id = transaction['investment_transaction_id']
         s = securities[t_sec_id]
         s_ticker = s['ticker_symbol']
         s_name = s['name']
@@ -260,7 +260,7 @@ class Importer(beangulp.Importer):
         assert s_cash_equivalent is True, "Currently, only sweeps are supported for misc fees"
 
         postings.append(data.Posting(":".join((self.account_name, self.cash_account_name)), -t_amount, None, None, None, None))
-        postings.append(data.Posting(":".join((self.account_name, s_ticker)), s_amount, None, s_price, None, {'transaction_id': t_transaction_id}))
+        postings.append(data.Posting(":".join((self.account_name, s_ticker)), s_amount, None, s_price, None, {'plaid_id': t_plaid_id}))
         txn = data.Transaction(meta, t_date, flags.FLAG_OKAY, s_name, t_name, data.EMPTY_SET, data.EMPTY_SET, postings)
         return txn
 
@@ -270,13 +270,13 @@ class Importer(beangulp.Importer):
         t_amount = amount.Amount(D(str(transaction['amount'])), t_currency)
         t_date = parse(transaction['date']).date()
         t_name = transaction['name']
-        t_transaction_id = transaction['investment_transaction_id']
+        t_plaid_id = transaction['investment_transaction_id']
         s = securities[t_sec_id]
         s_name = s['name']
         postings = []
 
         postings.append(data.Posting("Income:Dividend", t_amount, None, None, None, None))
-        postings.append(data.Posting(":".join((self.account_name, self.cash_account_name)), -t_amount, None, None, None, {'transaction_id': t_transaction_id}))
+        postings.append(data.Posting(":".join((self.account_name, self.cash_account_name)), -t_amount, None, None, None, {'plaid_id': t_plaid_id}))
         txn = data.Transaction(meta, t_date, flags.FLAG_OKAY, s_name, t_name, data.EMPTY_SET, data.EMPTY_SET, postings)
         return txn
 
@@ -286,7 +286,7 @@ class Importer(beangulp.Importer):
         t_amount = D(str(transaction['amount']))
         t_date = parse(transaction['date']).date()
         t_name = transaction['name']
-        t_transaction_id = transaction['investment_transaction_id']
+        t_plaid_id = transaction['investment_transaction_id']
         s = securities[t_sec_id]
         s_ticker = s['ticker_symbol']
         s_name = s['name']
@@ -296,7 +296,7 @@ class Importer(beangulp.Importer):
 
         postings.append(data.Posting(":".join((self.account_name, self.cash_account_name)), -amount.Amount(t_amount, t_currency), None, None, None, None))
         cost = position.Cost(t_price, t_currency, t_date, None)
-        postings.append(data.Posting(":".join((self.account_name, s_ticker)), t_quantity, cost, amount.Amount(t_price, t_currency), None, {'transaction_id': t_transaction_id}))
+        postings.append(data.Posting(":".join((self.account_name, s_ticker)), t_quantity, cost, amount.Amount(t_price, t_currency), None, {'plaid_id': t_plaid_id}))
         txn = data.Transaction(meta, t_date, flags.FLAG_OKAY, s_name, t_name, data.EMPTY_SET, data.EMPTY_SET, postings)
         return txn
 
