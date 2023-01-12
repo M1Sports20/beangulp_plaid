@@ -9,8 +9,7 @@
   "accounts": {
     "PlaidBank": {
       "access_token": "<ACCESS_TOKEN_GOES_HERE",
-      "account_id": "[ACCOUNT_ID_GOES_HERE]",
-      "account_type": "<BANK|INVESTMENTS>"
+      "account_id": "[ACCOUNT_ID_GOES_HERE]"
     }
   }
 }
