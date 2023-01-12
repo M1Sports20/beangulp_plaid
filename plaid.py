@@ -144,6 +144,9 @@ class Importer(beangulp.Importer):
         entries = []
         account = resp_transactions['accounts'][0]
         balance = str(account['balances']['current'])
+        available_bal = str(account['balances']['available'])  # Venmo, and some others don't have balance, but available balance only
+        if balance == "None":
+            balance = available_bal
         acct_type = account['type']
         currency = account['balances']['iso_currency_code']
         transactions = resp_transactions['transactions']
