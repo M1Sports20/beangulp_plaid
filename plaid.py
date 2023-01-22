@@ -1,17 +1,15 @@
 __copyright__ = "Copyright (C) 2022 Michael Spradling"
 __license__ = "GNU GPLv2"
 
+import collections
 import json
 import beangulp
 from dateutil.parser import parse
 from datetime import timedelta
 
-from beancount.core import data
-from beancount.core import amount
-from beancount.core import position
-from beancount.core import flags
+from beancount.core import data, amount, position, flags, interpolate
 from beangulp.testing import main
-from beancount.core.number import D, ZERO
+from beancount.core.number import D, ZERO, ONE
 
 DUPLICATE = '__duplicate__'
 
@@ -92,28 +90,6 @@ class Importer(beangulp.Importer):
 
         return entries
 
-    def deduplicate(self, entries: data.Entries, existing: data.Entries) -> data.Entries:
-        marked = []
-        plaid_ids = set()
-
-        # Create set of plaid_ids
-        for entry in existing:
-            if isinstance(entry, data.Transaction):
-                for posting in entry.postings:
-                    if 'plaid_id' in posting.meta:
-                        plaid_ids.add(posting.meta['plaid_id'])
-
-        for entry in entries:
-            if isinstance(entry, data.Transaction):
-                for posting in entry.postings:
-                    if posting.meta is not None and 'plaid_id' in posting.meta:
-                        if posting.meta['plaid_id'] in plaid_ids:
-                            meta = entry.meta.copy()
-                            meta[DUPLICATE] = True
-                            entry = entry._replace(meta=meta)
-            marked.append(entry)
-        return marked
-
     def create_sec_balance_asserts(self, filepath, securities, resp_holdings, commodities):
         entries = []
         holdings_table = self.__build_securities_table(resp_holdings['holdings'])
@@ -165,12 +141,10 @@ class Importer(beangulp.Importer):
             plaid_id = t['transaction_id']
             meta = data.new_metadata(filepath, index)
             units = amount.Amount(D(amt), currency)
-            pst_account = ':'.join(t['category']).replace("'", "").replace(',', '').replace(' ', '-')
 
             # Create beancount transaction with posting
             leg1 = data.Posting(self.account_name, -units, None, None, None, {'plaid_id': plaid_id})
-            leg2 = data.Posting("Expenses:" + pst_account, units, None, None, None, None)
-            txn = data.Transaction(meta, t_date, flags.FLAG_OKAY, merchant, description, data.EMPTY_SET, data.EMPTY_SET, [leg1, leg2])
+            txn = data.Transaction(meta, t_date, flags.FLAG_OKAY, merchant, description, data.EMPTY_SET, data.EMPTY_SET, [leg1])
             entries.append(txn)
 
         # Insert a final balance check
@@ -199,7 +173,7 @@ class Importer(beangulp.Importer):
                 if t_ticker is None and s_name in commodities:
                     t_ticker = commodities[s_name]
                 assert t_ticker is not None, f"Ticker unknown and couldn't lookup by name in ledger by name: ({ s_name })"
-                price = data.Price(meta, t_date, t_ticker, amount.Amount(D(str(t_price)), t_currency))
+                price = data.Price(meta, t_date - timedelta(days=1), t_ticker, amount.Amount(D(str(t_price)), t_currency))
                 entries.append(price)
         return entries
 
@@ -302,6 +276,97 @@ class Importer(beangulp.Importer):
         postings.append(data.Posting(":".join((self.account_name, s_ticker)), t_quantity, cost, amount.Amount(t_price, t_currency), None, {'plaid_id': t_plaid_id}))
         txn = data.Transaction(meta, t_date, flags.FLAG_OKAY, s_name, t_name, data.EMPTY_SET, data.EMPTY_SET, postings)
         return txn
+
+
+class PlaidSimilarityComparator:
+    """Similarity comparator of imported Plaid transactions.
+
+    This comparator needs to be able to handle Transaction instances which are
+    incomplete on one side, which have slightly different dates, or potentially
+    slightly different numbers.
+    """
+
+    # Fraction difference allowed of variation.
+    EPSILON = D('0.05')  # 5%
+
+    def __init__(self, max_date_delta=None):
+        """Constructor a comparator of entries.
+        Args:
+          max_date_delta: A datetime.timedelta instance of the max tolerated
+            distance between dates.
+        """
+        self.cache = {}
+        self.max_date_delta = max_date_delta
+
+    def __call__(self, entry1, entry2):
+        """Compare two entries, return true if they are deemed similar.
+
+        Args:
+          entry1: A first Transaction directive.
+          entry2: A second Transaction directive.
+        Returns:
+          A boolean.
+        """
+        # Check the date difference.
+        if self.max_date_delta is not None:
+            delta = ((entry1.date - entry2.date)
+                     if entry1.date > entry2.date else
+                     (entry2.date - entry1.date))
+            if delta > self.max_date_delta:
+                return False
+
+        try:
+            amounts1 = self.cache[id(entry1)]
+        except KeyError:
+            amounts1 = self.cache[id(entry1)] = amounts_map(entry1)
+        try:
+            amounts2 = self.cache[id(entry2)]
+        except KeyError:
+            amounts2 = self.cache[id(entry2)] = amounts_map(entry2)
+
+        # Look for amounts on common accounts.
+        common_keys = set(amounts1) & set(amounts2)
+        for key in sorted(common_keys):
+            # Compare the amounts.
+            number1 = amounts1[key]
+            number2 = amounts2[key]
+            if number1 == ZERO and number2 == ZERO:
+                break
+            diff = abs((number1 / number2)
+                       if number2 != ZERO
+                       else (number2 / number1))
+            if diff == ZERO:
+                return False
+            if diff < ONE:
+                diff = ONE/diff
+            if (diff - ONE) < self.EPSILON:
+                break
+        else:
+            return False
+
+        return True
+
+
+def amounts_map(entry):
+    """Compute a mapping of (account, currency) -> Decimal balances.
+
+    Args:
+      entry: A Transaction instance.
+    Returns:
+      A dict of account -> Amount balance.
+    """
+    amounts = collections.defaultdict(D)
+    for posting in entry.postings:
+        if not posting.meta:
+            continue
+        # Skip interpolated postings.
+        if interpolate.AUTOMATIC_META in posting.meta or 'plaid_id' not in posting.meta:
+            continue
+        currency = isinstance(posting.units, amount.Amount) and posting.units.currency
+        if isinstance(currency, str):
+            key = (posting.account, posting.meta['plaid_id'], currency)
+            amounts[key] += posting.units.number
+    return amounts
 
 
 if __name__ == '__main__':
