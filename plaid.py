@@ -364,7 +364,8 @@ def amounts_map(entry):
             continue
         currency = isinstance(posting.units, amount.Amount) and posting.units.currency
         if isinstance(currency, str):
-            key = (posting.account, posting.meta['plaid_id'], currency)
+            plaid_id = posting.meta['plaid_id'] if 'plaid_id' in posting.meta else None
+            key = (posting.account, plaid_id, currency)
             amounts[key] += posting.units.number
     return amounts
 
