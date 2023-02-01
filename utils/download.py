@@ -185,7 +185,7 @@ def main():
                 response = json.loads(str(e.body))
                 print(f"refresh failed: { response['display_message'] }({ response['error_code'] })")
 
-        # Determine last plaid update and supported api calls
+        # Determine supported api calls
         print(f"Downloading { acct }...")
         response = get_item(client, access_token)
         if response is not None:
