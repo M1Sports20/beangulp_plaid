@@ -216,7 +216,7 @@ class PlaidDownloader:
 
             # Save to file
             with open(filename, "w") as out_fd:
-                json.dump(output, out_fd, cls=DateEncoder)
+                json.dump(output, out_fd, indent=2, cls=DateEncoder)
 
         return True
 
