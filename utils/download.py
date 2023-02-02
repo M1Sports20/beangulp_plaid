@@ -132,18 +132,14 @@ def parse_args():
     parser.add_argument('-l', '--list', action='store_true', help="List accounts")
     parser.add_argument("-r", "--refresh", action='store_true',
                         help="Force plaid to refresh data immediately before downloading")
-    parser.add_argument('-s', '--start-date', dest='start_date', default=str(date.today() -
-                        timedelta(1)), help='First day of history to attempt to download, default to yesterday')
-    parser.add_argument('-e', '--end-date', dest='end_date', default=str(date.today()),
-                        help='Last day of history to attempt to download, defaults to today')
+    parser.add_argument('-n', '--fetch-days', type=int, dest='fetch_days', default=30,
+                        help='Number of days of transaction history to fetch')
     args = parser.parse_args()
 
     # Load settings config file
     with open(args.config_file, "r") as config_fd:
         args.config = json.load(config_fd)
 
-    args.end_date = datetime.strptime(args.end_date, '%Y-%m-%d').date()
-    args.start_date = datetime.strptime(args.start_date, '%Y-%m-%d').date()
     args.directory = getcwd() if args.directory is None else args.directory
 
     if args.list is True:
@@ -161,6 +157,78 @@ def parse_args():
 
     return args
 
+class PlaidDownloader:
+    def __init__(self, name, access_token, account_id, plaid_client, download_delta=timedelta(days=30), refresh=False):
+        self.account_name = name
+        self.access_token = access_token
+        self.account_id = account_id
+        self.plaid_client = plaid_client
+        self.download_delta = download_delta
+        self.refresh = refresh
+
+    def download(self, filename):
+        """
+        Download the most recent statement for an account.
+
+        Args:
+          filename: Where to place the downloaded statement
+        Returns:
+          A boolean: True if successful, False if failed
+          """
+        output = {}
+
+        end_date = date.today()
+        start_date = end_date - self.download_delta
+
+        if self.refresh:
+            try:
+                request = TransactionsRefreshRequest(access_token=self.access_token)
+                response = self.plaid_client.transactions_refresh(request)
+            except plaid.ApiException as e:
+                response = json.loads(str(e.body))
+                print(f"refresh failed: { response['display_message'] }({ response['error_code'] })")
+
+        # Determine supported api calls
+        print(f"Downloading { self.account_name }...")
+        response = get_item(self.plaid_client, self.access_token)
+        if response is not None:
+            output['resp_item'] = response.to_dict()
+            products = output['resp_item']['item']['products']
+
+            # Download Transactions
+            if "transactions" in products:
+                print("..transactions")
+                transactions = get_transactions(self.plaid_client, self.access_token, self.account_id, start_date, end_date)
+                if transactions is not None:
+                    output['resp_transactions'] = transactions.to_dict()
+
+            # Download Investment Transactions
+            if "investments" in products:
+                print("..investment transactions")
+                investment_transactions = get_investment_transactions(self.plaid_client, self.access_token, self.account_id, start_date, end_date)
+                if investment_transactions is not None:
+                    output['resp_investment_transactions'] = investment_transactions.to_dict()
+
+                print("..investment holdings")
+                holdings = get_investment_holdings(self.plaid_client, self.access_token, self.account_id)
+                if holdings is not None:
+                    output['resp_investment_holdings'] = holdings.to_dict()
+
+            # Save to file
+            with open(filename, "w") as out_fd:
+                json.dump(output, out_fd, cls=DateEncoder)
+
+        return True
+
+    def filename_suffix(self):
+        return "plaid.json"
+
+    def name(self):
+        """
+        Return a name for the account, suitable for use as a portion of a
+        filename
+        """
+        return self.account_name
 
 def main():
     args = parse_args()
@@ -172,52 +240,17 @@ def main():
     api_client = plaid.ApiClient(plaid_config)
     client = plaid_api.PlaidApi(api_client)
 
-    for acct in args.accounts:
-        access_token = args.config['accounts'][acct]['access_token']
-        account_id = None
-        output = {}
-
-        if args.refresh:
-            try:
-                request = TransactionsRefreshRequest(access_token=access_token)
-                response = client.transactions_refresh(request)
-            except plaid.ApiException as e:
-                response = json.loads(str(e.body))
-                print(f"refresh failed: { response['display_message'] }({ response['error_code'] })")
-
-        # Determine supported api calls
-        print(f"Downloading { acct }...")
-        response = get_item(client, access_token)
-        if response is not None:
-            output['resp_item'] = response.to_dict()
-            products = output['resp_item']['item']['products']
-
-            if 'account_id' in args.config['accounts'][acct]:
-                account_id = args.config['accounts'][acct]['account_id']
-
-            # Download Transactions
-            if "transactions" in products:
-                print("..transactions")
-                transactions = get_transactions(client, access_token, account_id, args.start_date, args.end_date)
-                if transactions is not None:
-                    output['resp_transactions'] = transactions.to_dict()
-
-            # Download Investment Transactions
-            if "investments" in products:
-                print("..investment transactions")
-                investment_transactions = get_investment_transactions(client, access_token, account_id, args.start_date, args.end_date)
-                if investment_transactions is not None:
-                    output['resp_investment_transactions'] = investment_transactions.to_dict()
-
-                print("..investment holdings")
-                holdings = get_investment_holdings(client, access_token, account_id)
-                if holdings is not None:
-                    output['resp_investment_holdings'] = holdings.to_dict()
-
-            # Save to file
-            with open(path.join(args.directory, f"{date.today()}_{acct}_plaid_download.json"), "w") as out_fd:
-                json.dump(output, out_fd, cls=DateEncoder)
-
+    for account_name in args.accounts:
+        account_config = args.config['accounts'][account_name]
+        downloader = PlaidDownloader(
+            name=account_name,
+            access_token=account_config['access_token'],
+            account_id=account_config['account_id'] if 'account_id' in account_config else None,
+            plaid_client=client,
+            download_delta=timedelta(args.fetch_days),
+            refresh=args.refresh
+        )
+        downloader.download(path.join(args.directory, f"{date.today()}_{account_name}_plaid_download.json"))
 
 if __name__ == '__main__':
     main()
