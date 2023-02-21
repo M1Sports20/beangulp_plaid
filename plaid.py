@@ -15,10 +15,11 @@ DUPLICATE = '__duplicate__'
 
 
 class Importer(beangulp.Importer):
-    def __init__(self, account_name, account_id):
+    def __init__(self, account_name, account_id, balance_offset_days=1):
         self.account_name = account_name
         self.account_id = account_id
         self.cash_account_name = "Cash"
+        self.balance_offset_days = balance_offset_days
         # Plaid defines many times of investment transations by mapping them
         # to a type and subtype.  Here we map type and subtype to a callback
         # function that creates the positing for that transaction type.
@@ -109,7 +110,7 @@ class Importer(beangulp.Importer):
 
                 meta = data.new_metadata(filepath, index)
                 amt = amount.Amount(D(t_quantity), t_ticker)
-                entries.append(data.Balance(meta, t_date + timedelta(days=1), ":".join((self.account_name, t_ticker)), amt, None, None))
+                entries.append(data.Balance(meta, t_date + timedelta(days=self.balance_offset_days), ":".join((self.account_name, t_ticker)), amt, None, None))
             else:
                 pass
                 # TODO: We had a transaction on a holding we no longer hold. balance should be 0
@@ -152,7 +153,7 @@ class Importer(beangulp.Importer):
             meta = data.new_metadata(filepath, 0)
             amt = amount.Amount(D(balance), currency)
             amt = -amt if acct_type == "credit" or acct_type == "loan" else amt
-            entries.append(data.Balance(meta, transactions_date + timedelta(days=1), self.account_name, amt, None, None))
+            entries.append(data.Balance(meta, transactions_date + timedelta(days=self.balance_offset_days), self.account_name, amt, None, None))
         return entries
 
     def extract_prices(self, filepath, resp_holdings, commodities):
