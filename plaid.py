@@ -29,7 +29,8 @@ class Importer(beangulp.Importer):
                     ("fee", "interest"): self.__fee_misc_fee,
                     ("fee", "dividend"): self.__fee_dividend,
                     ("buy", "buy"): self.__buy_buy_sell_sell,
-                    ("sell", "sell"): self.__buy_buy_sell_sell
+                    ("sell", "sell"): self.__buy_buy_sell_sell,
+                    ("transfer", "transfer"): self.__cash_transfer
         }
 
     def identify(self, filepath):
@@ -217,6 +218,18 @@ class Importer(beangulp.Importer):
 
         postings.append(data.Posting(":".join((self.account_name, self.cash_account_name)), -t_amount, None, None, None, {'plaid_id': t_plaid_id}))
         txn = data.Transaction(meta, t_date, flags.FLAG_OKAY, s_name, t_name, data.EMPTY_SET, data.EMPTY_SET, postings)
+        return txn
+
+    def __cash_transfer(self, meta, transaction, securities):
+        t_currency = transaction['iso_currency_code']
+        t_amount = amount.Amount(D(str(transaction['amount'])), t_currency)
+        t_date = parse(transaction['date']).date()
+        t_name = transaction['name']
+        t_plaid_id = transaction['investment_transaction_id']
+        postings = []
+
+        postings.append(data.Posting(":".join((self.account_name, self.cash_account_name)), -t_amount, None, None, None, {'plaid_id': t_plaid_id}))
+        txn = data.Transaction(meta, t_date, flags.FLAG_OKAY, t_currency, t_name, data.EMPTY_SET, data.EMPTY_SET, postings)
         return txn
 
     def __fee_misc_fee(self, meta, transaction, securities):
