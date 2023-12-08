@@ -11,8 +11,6 @@ from beancount.core import data, amount, position, flags, interpolate
 from beangulp.testing import main
 from beancount.core.number import D, ZERO, ONE
 
-DUPLICATE = '__duplicate__'
-
 
 class Importer(beangulp.Importer):
     def __init__(self, account_name, account_id):
@@ -28,8 +26,10 @@ class Importer(beangulp.Importer):
                     ("fee", "miscellaneous fee"): self.__fee_misc_fee,
                     ("fee", "interest"): self.__fee_misc_fee,
                     ("fee", "dividend"): self.__fee_dividend,
+                    ("cash", "dividend"): self.__fee_dividend,
                     ("buy", "buy"): self.__buy_buy_sell_sell,
                     ("sell", "sell"): self.__buy_buy_sell_sell,
+                    ("cash", "contribution"): self.__buy_buy_sell_sell,
                     ("transfer", "transfer"): self.__cash_transfer
         }
 
@@ -66,16 +66,18 @@ class Importer(beangulp.Importer):
                     entries.extend(ent)
 
             if 'resp_investment_transactions' in j:
-                ent, sec_changed = self.extract_investment_transactions(filepath, j['resp_item'], j['resp_investment_transactions'])
-                if len(ent):
-                    entries.extend(ent)
-
                 # Build list of commodities for price lookup of unknown tickers
                 commodities = {}
                 for c in existing:
                     if isinstance(c, data.Commodity):
                         (meta, date, currency) = c
                         commodities[meta['name']] = currency
+                        if 'name2' in meta:
+                            commodities[meta['name2']] = currency
+
+                ent, sec_changed = self.extract_investment_transactions(filepath, j['resp_item'], j['resp_investment_transactions'], commodities)
+                if len(ent):
+                    entries.extend(ent)
 
                 if 'resp_investment_holdings' in j:
                     # Balance asserts
@@ -178,7 +180,7 @@ class Importer(beangulp.Importer):
                 entries.append(price)
         return entries
 
-    def extract_investment_transactions(self, filepath, resp_item, resp_transactions):
+    def extract_investment_transactions(self, filepath, resp_item, resp_transactions, commodities):
         securities_changed = set()
         entries = []
         transactions = resp_transactions['investment_transactions']
@@ -192,7 +194,7 @@ class Importer(beangulp.Importer):
             trans_func = self.plaid_func_table.get((t_type, t_subtype))
             assert trans_func is not None, f"Unhandled Investment transaction (type: { t_type }, subtype: { t_subtype } )"
             meta = data.new_metadata(filepath, index)
-            ent = trans_func(meta, t, securities)
+            ent = trans_func(meta, t, securities, commodities)
             if ent is not None:
                 entries.append(ent)
                 securities_changed.add(t_security_id)
@@ -205,7 +207,10 @@ class Importer(beangulp.Importer):
             sec_table[s['security_id']] = s
         return sec_table
 
-    def __cash_deposit_withdrawal(self, meta, transaction, securities):
+    def __cash_deposit_withdrawal(self, meta, transaction, securities, commodities):
+        if transaction['quantity'] is not None:
+            return self.__buy_buy_sell_sell(meta, transaction, securities, commodities)
+
         t_sec_id = transaction['security_id']
         t_currency = transaction['iso_currency_code']
         t_amount = amount.Amount(D(str(transaction['amount'])), t_currency)
@@ -220,7 +225,7 @@ class Importer(beangulp.Importer):
         txn = data.Transaction(meta, t_date, flags.FLAG_OKAY, s_name, t_name, data.EMPTY_SET, data.EMPTY_SET, postings)
         return txn
 
-    def __cash_transfer(self, meta, transaction, securities):
+    def __cash_transfer(self, meta, transaction, securities, commodities):
         t_currency = transaction['iso_currency_code']
         t_amount = amount.Amount(D(str(transaction['amount'])), t_currency)
         t_date = parse(transaction['date']).date()
@@ -232,7 +237,7 @@ class Importer(beangulp.Importer):
         txn = data.Transaction(meta, t_date, flags.FLAG_OKAY, t_currency, t_name, data.EMPTY_SET, data.EMPTY_SET, postings)
         return txn
 
-    def __fee_misc_fee(self, meta, transaction, securities):
+    def __fee_misc_fee(self, meta, transaction, securities, commodities):
         t_sec_id = transaction['security_id']
         t_currency = transaction['iso_currency_code']
         t_amount = amount.Amount(D(str(transaction['amount'])), t_currency)
@@ -254,7 +259,7 @@ class Importer(beangulp.Importer):
         txn = data.Transaction(meta, t_date, flags.FLAG_OKAY, s_name, t_name, data.EMPTY_SET, data.EMPTY_SET, postings)
         return txn
 
-    def __fee_dividend(self, meta, transaction, securities):
+    def __fee_dividend(self, meta, transaction, securities, commodities):
         t_sec_id = transaction['security_id']
         t_currency = transaction['iso_currency_code']
         t_amount = amount.Amount(D(str(transaction['amount'])), t_currency)
@@ -270,7 +275,7 @@ class Importer(beangulp.Importer):
         txn = data.Transaction(meta, t_date, flags.FLAG_OKAY, s_name, t_name, data.EMPTY_SET, data.EMPTY_SET, postings)
         return txn
 
-    def __buy_buy_sell_sell(self, meta, transaction, securities):
+    def __buy_buy_sell_sell(self, meta, transaction, securities, commodities):
         t_sec_id = transaction['security_id']
         t_currency = transaction['iso_currency_code']
         t_amount = D(str(transaction['amount']))
@@ -279,6 +284,9 @@ class Importer(beangulp.Importer):
         t_plaid_id = transaction['investment_transaction_id']
         s = securities[t_sec_id]
         s_ticker = s['ticker_symbol']
+        s_name = s['name']
+        if s_ticker is None and s_name in commodities:
+            s_ticker = commodities[s_name]
         s_name = s['name']
         t_quantity = amount.Amount(D(str(transaction['quantity'])), s_ticker)
         t_price = D(str(transaction['price']))
