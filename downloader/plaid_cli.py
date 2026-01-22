@@ -191,6 +191,35 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+class PlaidDownloader:
+    def __init__(self, name, client_id, secret, access_token, account_id, start_date=None, end_date=date.today(), is_investment=True, is_bank=True):
+        self.client_id = client_id
+        self.secret = secret
+        self.access_token = access_token
+        self.account_id = account_id
+        self.account_name = name
+        self.is_investment = is_investment
+        self.is_bank = is_bank
+        self.end_date = end_date
+        self.start_date = start_date
+
+    def download(self, filename):
+        plaid_api = PlaidApi(client_id=self.client_id, secret=self.secret, production=True)
+        data = {}
+        if self.is_bank:
+            data['transactions'] = plaid_api.get_transactions(self.access_token, self.account_id, self.start_date, self.end_date)
+        if self.is_investment:
+            data['investment_transactions'] = plaid_api.get_investment_transactions(self.access_token, self.account_id, self.start_date, self.end_date)
+            data['investment_holdings'] = plaid_api.get_investment_holdings(self.access_token, self.account_id)
+        print_save_output(filename, data)
+
+    def filename_suffix(self):
+        return "plaid.json"
+
+    def name(self):
+        return self.account_name
+
+
 if __name__ == "__main__":
     parser = build_parser()
     args = parser.parse_args()
