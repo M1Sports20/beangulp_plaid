@@ -1,1 +1,2 @@
 plaid-python==16.0.0
+tabulate

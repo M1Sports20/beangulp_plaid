@@ -211,7 +211,7 @@ class PlaidDownloader:
         if self.is_investment:
             data['investment_transactions'] = plaid_api.get_investment_transactions(self.access_token, self.account_id, self.start_date, self.end_date)
             data['investment_holdings'] = plaid_api.get_investment_holdings(self.access_token, self.account_id)
-        print_save_output(filename, data)
+        print_save_output(Path(filename), data)
 
     def filename_suffix(self):
         return "plaid.json"
